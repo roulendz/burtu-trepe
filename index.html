@@ -2,8 +2,82 @@
 <html lang="lv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burtu Trepe — Mācies rakstīt latviski</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Burtu Trepe — Mācies rakstīt latviski ar klaviatūru</title>
+
+    <!-- ===== SEO ===== -->
+    <meta name="description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi no mājas rindas burtiem līdz pilniem teikumiem ar garumzīmēm un mīkstinājumiem. Mobilā un datorā, leaderboard, vairāki varoņi.">
+    <meta name="keywords" content="rakstīšana, klaviatūra, bērniem, latviešu valoda, burtu trepe, mācīties rakstīt, typing, kids, Latvian typing, garumzīmes, mīkstinājumi">
+    <meta name="author" content="Burtu Trepe">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0f0c29">
+    <meta name="color-scheme" content="dark">
+    <meta name="application-name" content="Burtu Trepe">
+    <meta name="apple-mobile-web-app-title" content="Burtu Trepe">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- ===== Favicon (inline SVG with keyboard emoji) ===== -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='86'%3E%E2%8C%A8%EF%B8%8F%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="og-image.svg">
+    <link rel="mask-icon" href="og-image.svg" color="#f5576c">
+
+    <!-- ===== Open Graph (Facebook, WhatsApp, LinkedIn, Discord, Telegram) ===== -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta property="og:description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, vairāki varoņi (Bērns, Spaidermens, Mavuika), leaderboard. Mobile-friendly.">
+    <meta property="og:image" content="og-image.svg">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Burtu Trepe — rakstīšanas spēle bērniem ar klaviatūras emoji un kāpņu vizuālu">
+    <meta property="og:locale" content="lv_LV">
+    <meta property="og:site_name" content="Burtu Trepe">
+    <!-- TODO: replace with real domain when deployed -->
+    <meta property="og:url" content="https://burtu-trepe.example.com/">
+
+    <!-- ===== Twitter Card ===== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta name="twitter:description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, leaderboard, mobile-friendly.">
+    <meta name="twitter:image" content="og-image.svg">
+    <meta name="twitter:image:alt" content="Burtu Trepe — rakstīšanas spēle bērniem">
+
+    <!-- ===== Canonical (update when deployed) ===== -->
+    <link rel="canonical" href="https://burtu-trepe.example.com/">
+
+    <!-- ===== Structured data (Schema.org WebApplication) ===== -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Burtu Trepe",
+        "alternateName": "Burtu Trepe — Mācies rakstīt latviski",
+        "description": "Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi no mājas rindas burtiem līdz pilniem teikumiem ar garumzīmēm un mīkstinājumiem.",
+        "url": "https://burtu-trepe.example.com/",
+        "applicationCategory": "EducationalApplication",
+        "applicationSubCategory": "TypingTutor",
+        "operatingSystem": "Web Browser",
+        "browserRequirements": "Requires JavaScript and a modern browser.",
+        "inLanguage": "lv-LV",
+        "isAccessibleForFree": true,
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+        },
+        "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "student",
+            "suggestedMinAge": 6
+        },
+        "educationalUse": "Practice",
+        "learningResourceType": "Game",
+        "image": "og-image.svg"
+    }
+    </script>
+
+    <link rel="stylesheet" href="js/leaderboard.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
@@ -2286,39 +2360,31 @@ function levelComplete() {
     }
     localStorage.setItem('burtuTrepe_diff', JSON.stringify(wordDifficulty));
 
-    const messages = [
-        { e: '🎉', t: 'Lieliski!' },
-        { e: '🌟', t: 'Bravo!' },
-        { e: '🏆', t: 'Super!' },
-        { e: '✨', t: 'Fantastiski!' },
-        { e: '🚀', t: 'Tu lido!' },
-        { e: '⚡', t: 'Tu esi ātrs!' }
-    ];
-    const m = messages[Math.floor(Math.random()*messages.length)];
-
-    document.getElementById('celebEmoji').textContent = m.e;
-    document.getElementById('celebTitle').textContent = m.t;
-    document.getElementById('celebMsg').textContent = `${lvl.n}. līmenis pabeigts — "${lvl.name}"`;
-    document.getElementById('csScore').textContent = score;
-    document.getElementById('csWpm').textContent = wpm;
-    document.getElementById('csAcc').textContent = acc + '%';
-
-    // Reset focus to replay
-    celebFocusedBtn = 'replay';
-    updateCelebFocus();
-
-    // Hide next button on last level
-    const nextBtn = document.querySelector('[data-action="next"]');
-    if (currentLevelIdx >= LEVELS.length - 1) {
-        nextBtn.style.display = 'none';
-    } else {
-        nextBtn.style.display = 'flex';
-    }
-
-    setTimeout(() => {
-        document.getElementById('celebration').classList.add('active');
-    }, 600);
+    // Hand off to the leaderboard module. It owns the UI from here and will
+    // dispatch leaderboard:{replay|next|menu} when the player picks an action.
+    document.dispatchEvent(new CustomEvent('game:level-complete', {
+        detail: {
+            level: lvl.n,
+            score: score,
+            wpm: wpm,
+            accuracy: acc,
+            skin: currentSkin,
+            isLastLevel: currentLevelIdx >= LEVELS.length - 1,
+        }
+    }));
 }
+
+// Continue actions emitted by the leaderboard overlay
+document.addEventListener('leaderboard:replay', () => startLevel(currentLevelIdx));
+document.addEventListener('leaderboard:next', () => {
+    if (currentLevelIdx + 1 < LEVELS.length) startLevel(currentLevelIdx + 1);
+    else startLevel(currentLevelIdx);
+});
+document.addEventListener('leaderboard:menu', () => backToMenu());
+document.addEventListener('leaderboard:done', () => {
+    // Network failed — fall back to old celebration so player isn't stuck
+    document.getElementById('celebration').classList.add('active');
+});
 
 // ============================================
 // CELEBRATION KEYBOARD NAV
@@ -2395,13 +2461,24 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    // If a leaderboard overlay or its name prompt is open, let it handle
+    // every key — never steal focus back to the typing input.
+    const lbOpen = document.getElementById('lbOverlay')?.classList.contains('open')
+                || !!document.querySelector('.lb-prompt:not(.closing)');
+    if (lbOpen) return;
+
     if (gameActive) {
         if (e.key === 'Escape') {
             backToMenu();
             return;
         }
-        // Refocus input if user clicks away
-        if (document.activeElement !== wordInput && /^[a-zA-Zāēīūčšžļķņģ]$/.test(e.key)) {
+        // Refocus input if user clicks away — but never if they're typing
+        // into a different input (name modal, search field, etc.)
+        const ae = document.activeElement;
+        const typingElsewhere = ae && ae !== wordInput && (
+            ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable
+        );
+        if (!typingElsewhere && /^[a-zA-Zāēīūčšžļķņģ]$/.test(e.key)) {
             wordInput.focus();
         }
     }
@@ -2453,5 +2530,8 @@ buildKeyboard();
 buildLevelSelect();
 applySkin(currentSkin);
 </script>
+
+<!-- Leaderboard module — registers listener for game:level-complete -->
+<script type="module" src="js/leaderboard-main.js"></script>
 </body>
 </html>
