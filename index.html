@@ -1857,17 +1857,33 @@ function flashKey(char) {
 // ============================================
 // GAME
 // ============================================
+// Maximum steps any level renders, regardless of what the level config says.
+// Keeps the staircase from getting too crowded on small screens.
+const MAX_STEPS = 10;
+
+function shuffleInPlace(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
 function pickWords(level) {
-    // Drill levels: shuffle so the kid actually reacts to each prompt instead
-    // of memorizing the order. Skip adaptive difficulty here — drill items
-    // are letter sequences, not real words.
+    const stepCount = Math.min(level.steps, MAX_STEPS);
+
+    // Drill levels: prioritize letter triples (e.g. "fff", "jjj") so every
+    // introduced letter gets practiced even when we trim. Other items
+    // (alternations like "fjfj", syllables) fill the remaining slots.
     if (level.drill) {
-        const shuffled = [...level.words];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        const triples = [];
+        const others = [];
+        for (const w of level.words) {
+            if (w.length === 3 && w[0] === w[1] && w[1] === w[2]) triples.push(w);
+            else others.push(w);
         }
-        return shuffled.slice(0, level.steps);
+        const ordered = [...shuffleInPlace(triples), ...shuffleInPlace(others)];
+        return ordered.slice(0, stepCount);
     }
 
     const all = [...level.words];
@@ -1878,28 +1894,24 @@ function pickWords(level) {
         const copies = 1 + Math.min(diff, 3);
         for (let i=0; i<copies; i++) weighted.push(w);
     });
-    // Shuffle
-    for (let i = weighted.length-1; i > 0; i--) {
-        const j = Math.floor(Math.random()*(i+1));
-        [weighted[i], weighted[j]] = [weighted[j], weighted[i]];
-    }
-    // Pick unique up to steps
+    shuffleInPlace(weighted);
+    // Pick unique up to stepCount
     const picked = [];
     const seen = new Set();
     for (const w of weighted) {
         if (!seen.has(w)) {
             picked.push(w);
             seen.add(w);
-            if (picked.length >= level.steps) break;
+            if (picked.length >= stepCount) break;
         }
     }
     // Top up if needed
-    while (picked.length < level.steps && picked.length < all.length) {
+    while (picked.length < stepCount && picked.length < all.length) {
         const w = all[Math.floor(Math.random()*all.length)];
         if (!seen.has(w)) { picked.push(w); seen.add(w); }
-        else if (picked.length < level.steps) picked.push(w);
+        else if (picked.length < stepCount) picked.push(w);
     }
-    return picked.slice(0, level.steps);
+    return picked.slice(0, stepCount);
 }
 
 function startLevel(idx) {
