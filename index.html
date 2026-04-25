@@ -680,10 +680,15 @@
             margin-left: calc(var(--stride, 40px) - var(--step-w, 80px));
             transform: translateY(calc(-1 * var(--rise, 18px) * var(--idx, 0)));
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
         }
         .step:first-child {
             margin-left: 0;
         }
+        /* Z-stack so the step the kid is currently typing is always visible,
+           even when neighbouring steps overlap on narrow screens. */
+        .step.completed { z-index: 5; }
+        .step.active { z-index: 100; }
 
         .step-block {
             width: 100%;
@@ -796,6 +801,13 @@
             font-weight: 700;
             letter-spacing: 4px;
             min-height: 50px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .keyboard-wrap {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .wd-char {
@@ -2439,6 +2451,23 @@ function backToMenu() {
 // EVENT WIRING
 // ============================================
 const wordInput = document.getElementById('wordInput');
+
+// Mobile: tapping the visual keyboard or the word display focuses the input
+// so the on-screen keyboard pops up. Must fire INSIDE the user gesture
+// (iOS won't open the keyboard from a programmatic focus otherwise).
+function focusWordInput() {
+    if (document.activeElement !== wordInput) wordInput.focus();
+}
+['click', 'touchend'].forEach(evt => {
+    document.getElementById('wordDisplay').addEventListener(evt, (e) => {
+        e.preventDefault();
+        focusWordInput();
+    });
+    document.getElementById('keyboardWrap').addEventListener(evt, (e) => {
+        e.preventDefault();
+        focusWordInput();
+    });
+});
 
 wordInput.addEventListener('input', (e) => {
     handleInput(e.target.value);
