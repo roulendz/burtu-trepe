@@ -572,47 +572,48 @@
             flex: 1;
             width: 100%;
             display: flex;
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
             min-height: 0;
         }
 
-        /* Flex-based staircase: each step is a flex item with fixed width.
-           Cards never overlap (gap separates them) and overflow horizontally
-           on narrow screens with smooth touch scrolling. The staircase shape
-           is created by translateY(-rise * idx) on each step. */
+        /* Staircase: flex layout with negative left margins so steps overlap
+           horizontally (creating the "stacked" look). Vertical separation
+           comes from translateY(rise * idx). Always fits the container —
+           no horizontal scroll. JS computes stepW, stride, rise, font-scale. */
         .staircase {
             position: relative;
             width: 100%;
             max-width: 1100px;
-            height: 280px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            min-height: 200px;
+            max-height: 420px;
+            overflow: hidden;
             display: flex;
             align-items: flex-end;
-            justify-content: flex-start;       /* fallback */
-            justify-content: safe center;      /* center when fits, flex-start when overflowing */
-            gap: 6px;
+            justify-content: center;
             padding: 0 16px 8px;
             box-sizing: border-box;
-            scrollbar-width: thin;
         }
-        .staircase::-webkit-scrollbar { height: 6px; }
-        .staircase::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
 
         .step {
             position: relative;
             flex: 0 0 var(--step-w, 80px);
-            height: 38px;
+            height: var(--step-h, 38px);
+            /* Negative margin pulls each step left so it overlaps the previous
+               one horizontally — total flex span = stepW + (n-1)*stride. */
+            margin-left: calc(var(--stride, 40px) - var(--step-w, 80px));
             transform: translateY(calc(-1 * var(--rise, 18px) * var(--idx, 0)));
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .step:first-child {
+            margin-left: 0;
         }
 
         .step-block {
             width: 100%;
-            padding: 0 14px;
-            height: 38px;
+            padding: 0 12px;
+            height: 100%;
             background: linear-gradient(135deg, #2d1b69, #1a3854);
             border-radius: 10px;
             display: flex;
@@ -636,10 +637,10 @@
             transform: scale(1.08);
         }
 
-        /* Sentence levels need smaller text — long words otherwise overflow */
+        /* Sentence levels start with smaller base font (long content per step) */
         .staircase.sentences .step-word {
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
+            font-size: calc(0.85rem * var(--font-scale, 1));
+            letter-spacing: calc(1.5px * var(--font-scale, 1));
         }
 
         @keyframes stepPulse {
@@ -648,12 +649,14 @@
         }
 
         .step-word {
-            font-size: 1.05rem;
+            font-size: calc(1.05rem * var(--font-scale, 1));
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: calc(2px * var(--font-scale, 1));
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
         }
 
         .character {
@@ -1100,10 +1103,6 @@
         }
         @media (max-width: 850px) {
             .level-grid { grid-template-columns: repeat(2, 1fr); }
-            .staircase { height: 240px; }
-            .step-block { height: 32px; }
-            .step { height: 32px; }
-            .step-word { font-size: 0.9rem; }
             .character-body { font-size: 32px; }
             .word-display { font-size: 1.6rem; }
             .kb-key { width: 32px; height: 32px; font-size: 0.75rem; }
@@ -1856,32 +1855,54 @@ function startLevel(idx) {
 function buildStaircase() {
     const c = document.getElementById('staircase');
     c.innerHTML = '';
-    c.style.removeProperty('--step-w');
-    c.style.removeProperty('--rise');
 
     const total = roundWords.length;
     if (total === 0) return;
 
+    const cw = c.offsetWidth || 800;
     const ch = c.offsetHeight || 280;
     const isMobile = window.matchMedia('(max-width: 850px)').matches;
-    const charSize = isMobile ? 32 : 40;
-    const stepHeight = isMobile ? 32 : 38;
-    const groundOffset = 50; // distance from container bottom for character start
+    const isSentence = !!LEVELS[currentLevelIdx].isSentence;
 
-    // Step width = enough to fit the longest word, with a sensible minimum.
-    // Same width for every step so the staircase looks uniform.
+    const charSize = isMobile ? 32 : 40;
+    // Slightly shorter blocks for sentences (need vertical room) and on mobile
+    const stepHeight = isSentence
+        ? (isMobile ? 26 : 32)
+        : (isMobile ? 30 : 38);
+    const groundOffset = 50;
+    const sidePadding = 16;
+
     const lengths = roundWords.map(w => [...w].length);
     const maxLen = Math.max(...lengths);
-    const isSentence = !!LEVELS[currentLevelIdx].isSentence;
     const charPx = isSentence ? 9 : 12;
-    const stepW = Math.max(60, maxLen * charPx + 22);
+    const idealStepW = maxLen * charPx + 28;
+    const availableW = Math.max(200, cw - sidePadding * 2);
 
-    // Vertical rise per step: leave room for the character on the top step + flag.
+    // Step width: fit the word but never exceed the container width
+    let stepW = Math.min(idealStepW, availableW);
+    stepW = Math.max(56, stepW);
+
+    // Stride = horizontal offset between consecutive steps. We want stairs
+    // mostly stacked vertically (small stride) so the whole staircase fits
+    // without horizontal scroll. Use the leftover width after stepW fits.
+    const remainingForStride = availableW - stepW;
+    const idealStride = Math.min(stepW * 0.35, 70);
+    const maxStride = remainingForStride / Math.max(total - 1, 1);
+    const stride = Math.max(0, Math.min(idealStride, maxStride));
+
+    // Vertical rise: divide remaining height between all steps. The character
+    // sits on top of the highest step plus 4px breathing room.
     const vertAvail = ch - groundOffset - stepHeight - charSize - 12;
     const vertRise = Math.max(8, vertAvail / Math.max(total - 1, 1));
 
+    // Font scale: shrink text proportionally if stepW had to shrink
+    const fontScale = Math.min(1, (stepW - 28) / Math.max(maxLen * charPx, 1));
+
     c.style.setProperty('--step-w', stepW + 'px');
+    c.style.setProperty('--stride', stride + 'px');
     c.style.setProperty('--rise', vertRise + 'px');
+    c.style.setProperty('--step-h', stepHeight + 'px');
+    c.style.setProperty('--font-scale', fontScale.toFixed(3));
     c.classList.toggle('sentences', isSentence);
 
     for (let i = 0; i < total; i++) {
@@ -1893,23 +1914,20 @@ function buildStaircase() {
         c.appendChild(step);
     }
 
-    // Character (absolute, positioned after layout)
     const char = document.createElement('div');
     char.className = 'character';
     char.id = 'character';
     char.innerHTML = `<div class="character-body">${SKINS[currentSkin].char}</div>`;
     c.appendChild(char);
 
-    // Finish flag (absolute, positioned after layout)
     const flag = document.createElement('div');
     flag.className = 'finish-flag';
     flag.id = 'finish-flag';
     flag.textContent = '🏁';
     c.appendChild(flag);
 
-    c._layout = { total, stepW, vertRise, stepHeight, charSize, ch, groundOffset };
+    c._layout = { total, stepW, stride, vertRise, stepHeight, charSize, ch, groundOffset };
 
-    // Position character + flag once the flex layout has computed positions
     requestAnimationFrame(() => {
         positionCharOnGround();
         positionFinishFlag();
@@ -1964,18 +1982,6 @@ function moveCharacter(stepIdx) {
     char.style.left = (box.x + box.w / 2 - charSize / 2) + 'px';
     char.style.top  = (box.y - charSize - 4) + 'px';
     setTimeout(() => char.classList.remove('jumping'), 600);
-
-    // Auto-scroll horizontally on narrow screens so the active step stays in view
-    const stepCenter = box.x + box.w / 2;
-    const visStart = c.scrollLeft;
-    const visEnd = visStart + c.clientWidth;
-    const margin = 80;
-    if (stepCenter > visEnd - margin || stepCenter < visStart + margin) {
-        c.scrollTo({
-            left: Math.max(0, stepCenter - c.clientWidth / 2),
-            behavior: 'smooth'
-        });
-    }
 }
 
 function updateUI() {
