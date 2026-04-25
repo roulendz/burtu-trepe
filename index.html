@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burtu Trepe — Mācies rakstīt latviski</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
+        :root {
+            --bg-1: #0f0c29;
+            --bg-2: #1a1a3e;
+            --bg-3: #2d1b69;
+            --accent-pink: #f093fb;
+            --accent-red: #f5576c;
+            --accent-orange: #fda085;
+            --accent-green: #38ef7d;
+            --accent-cyan: #4facfe;
+            --accent-purple: #764ba2;
+            --accent-blue: #667eea;
+            --gold: #fdd835;
+
+            /* Finger colors */
+            --finger-LP: #ff6b9d;
+            --finger-LR: #ffa86b;
+            --finger-LM: #ffd96b;
+            --finger-LI: #6bff9d;
+            --finger-RI: #6bd4ff;
+            --finger-RM: #95a4ff;
+            --finger-RR: #c896ff;
+            --finger-RP: #ff8b8b;
+            --finger-TH: #9ca3af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            background: linear-gradient(180deg, #0f0c29 0%, #1a1a3e 30%, #0f3460 65%, #533483 100%);
+            user-select: none;
+            color: white;
+            transition: background 0.6s ease;
+        }
+
+        /* ===== SPIDER-MAN SKIN ===== */
+        body[data-skin="spiderman"] {
+            --accent-pink: #ff1744;
+            --accent-red: #d50000;
+            --accent-orange: #ff5252;
+            --accent-cyan: #2962ff;
+            --accent-blue: #2962ff;
+            --accent-purple: #1565c0;
+            --gold: #ffeb3b;
+            background: linear-gradient(180deg, #0a0a14 0%, #2a0a1a 30%, #4a0e1f 65%, #6e1325 100%);
+        }
+
+        body[data-skin="spiderman"] .moon {
+            background: radial-gradient(circle at 35% 35%, #ffffff, #e0e0e0);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 23, 68, 0.4);
+        }
+
+        body[data-skin="spiderman"] .ground {
+            background: linear-gradient(0deg, #0a0a14 0%, transparent 100%);
+        }
+
+        body[data-skin="spiderman"] .ls-header h1 {
+            background: linear-gradient(135deg, #ff1744, #d50000, #2962ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body[data-skin="spiderman"] .step-block {
+            background: linear-gradient(135deg, #1565c0, #1e88e5);
+            box-shadow: 0 4px 0 #0d47a1, 0 6px 16px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.15);
+        }
+        body[data-skin="spiderman"] .step.completed .step-block {
+            background: linear-gradient(135deg, #d50000, #ff1744);
+            box-shadow: 0 4px 0 #b71c1c, 0 6px 16px rgba(255, 23, 68, 0.4);
+        }
+        body[data-skin="spiderman"] .step.active .step-block {
+            background: linear-gradient(135deg, #ff1744, #ff5252);
+            box-shadow: 0 4px 0 #d50000, 0 6px 20px rgba(255, 23, 68, 0.6);
+        }
+
+        body[data-skin="spiderman"] .web-decor {
+            display: block;
+        }
+
+        /* ===== MAVUIKA SKIN (Genshin Impact Pyro Archon) ===== */
+        body[data-skin="mavuika"] {
+            --accent-pink: #ff6f00;
+            --accent-red: #d84315;
+            --accent-orange: #ff9800;
+            --accent-cyan: #ffd54f;
+            --accent-blue: #f57c00;
+            --accent-purple: #bf360c;
+            --gold: #ffc107;
+            background: linear-gradient(180deg, #1a0500 0%, #2d0a04 30%, #5a1d0a 65%, #8b3a0e 100%);
+        }
+
+        body[data-skin="mavuika"] .moon {
+            background: radial-gradient(circle at 35% 35%, #fff176, #ff6f00 60%, #d84315);
+            box-shadow:
+                0 0 30px rgba(255, 235, 59, 0.6),
+                0 0 60px rgba(255, 111, 0, 0.5),
+                0 0 100px rgba(216, 67, 21, 0.3);
+            animation: sunPulse 3s ease-in-out infinite;
+        }
+        @keyframes sunPulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 30px rgba(255, 235, 59, 0.6),
+                    0 0 60px rgba(255, 111, 0, 0.5),
+                    0 0 100px rgba(216, 67, 21, 0.3);
+            }
+            50% {
+                box-shadow:
+                    0 0 50px rgba(255, 235, 59, 1),
+                    0 0 90px rgba(255, 111, 0, 0.8),
+                    0 0 140px rgba(216, 67, 21, 0.5);
+            }
+        }
+
+        body[data-skin="mavuika"] .moon::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background:
+                conic-gradient(from 0deg,
+                    transparent 0deg, rgba(255, 235, 59, 0.5) 10deg, transparent 20deg,
+                    transparent 40deg, rgba(255, 235, 59, 0.5) 50deg, transparent 60deg,
+                    transparent 80deg, rgba(255, 235, 59, 0.5) 90deg, transparent 100deg,
+                    transparent 120deg, rgba(255, 235, 59, 0.5) 130deg, transparent 140deg,
+                    transparent 160deg, rgba(255, 235, 59, 0.5) 170deg, transparent 180deg,
+                    transparent 200deg, rgba(255, 235, 59, 0.5) 210deg, transparent 220deg,
+                    transparent 240deg, rgba(255, 235, 59, 0.5) 250deg, transparent 260deg,
+                    transparent 280deg, rgba(255, 235, 59, 0.5) 290deg, transparent 300deg,
+                    transparent 320deg, rgba(255, 235, 59, 0.5) 330deg, transparent 340deg);
+            opacity: 0.5;
+            animation: sunRays 14s linear infinite;
+            z-index: -1;
+        }
+        @keyframes sunRays {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        body[data-skin="mavuika"] .ground {
+            background: linear-gradient(0deg, #4a0e00 0%, rgba(216, 67, 21, 0.2) 50%, transparent 100%);
+            height: 140px;
+        }
+
+        body[data-skin="mavuika"] .star {
+            background: #ffd54f;
+            box-shadow: 0 0 4px rgba(255, 213, 79, 0.6);
+        }
+
+        body[data-skin="mavuika"] .ls-header h1 {
+            background: linear-gradient(135deg, #ffd54f, #ff6f00, #d84315);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 30px rgba(255, 111, 0, 0.4);
+        }
+
+        body[data-skin="mavuika"] .step-block {
+            background: linear-gradient(135deg, #5d2e0a, #8b3a0e);
+            box-shadow: 0 4px 0 #3d1c04, 0 6px 16px rgba(0,0,0,0.4);
+            border-color: rgba(255, 193, 7, 0.2);
+        }
+        body[data-skin="mavuika"] .step.completed .step-block {
+            background: linear-gradient(135deg, #ff6f00, #ffc107);
+            box-shadow: 0 4px 0 #d84315, 0 6px 18px rgba(255, 193, 7, 0.5);
+            border-color: rgba(255, 235, 59, 0.4);
+        }
+        body[data-skin="mavuika"] .step.active .step-block {
+            background: linear-gradient(135deg, #ff5722, #ff9800, #ffc107);
+            box-shadow: 0 4px 0 #d84315, 0 6px 24px rgba(255, 152, 0, 0.7);
+            border-color: rgba(255, 235, 59, 0.6);
+        }
+
+        body[data-skin="mavuika"] .cs-card.selected {
+            background: linear-gradient(135deg, rgba(255, 111, 0, 0.3), rgba(255, 193, 7, 0.2));
+            border-color: #ff9800;
+            box-shadow: 0 8px 28px rgba(255, 111, 0, 0.45), inset 0 1px 0 rgba(255,235,59,0.2);
+        }
+        body[data-skin="mavuika"] .cs-card .cs-check {
+            background: linear-gradient(135deg, #ff6f00, #ffc107);
+        }
+
+        body[data-skin="mavuika"] .flame-decor {
+            display: block;
+        }
+        .flame-decor {
+            display: none;
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            font-size: 4rem;
+            opacity: 0.15;
+            filter: blur(0.5px) drop-shadow(0 0 20px rgba(255, 111, 0, 0.6));
+            animation: flameFloat 3s ease-in-out infinite;
+        }
+        .flame-decor.fl-1 { bottom: 80px; left: 4%; animation-delay: 0s; }
+        .flame-decor.fl-2 { bottom: 110px; left: 18%; animation-delay: 0.6s; font-size: 3rem; }
+        .flame-decor.fl-3 { bottom: 90px; right: 6%; animation-delay: 1.2s; }
+        .flame-decor.fl-4 { bottom: 120px; right: 22%; animation-delay: 1.8s; font-size: 3rem; }
+        @keyframes flameFloat {
+            0%, 100% { transform: translateY(0) scale(1) rotate(-2deg); opacity: 0.18; }
+            50% { transform: translateY(-12px) scale(1.06) rotate(2deg); opacity: 0.28; }
+        }
+
+        .web-decor {
+            display: none;
+            position: fixed;
+            width: 220px;
+            height: 220px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .web-decor.tl { top: -40px; left: -40px; transform: rotate(0deg); }
+        .web-decor.tr { top: -40px; right: -40px; transform: rotate(90deg); }
+        .web-decor.bl { bottom: -40px; left: -40px; transform: rotate(-90deg); }
+        .web-decor.br { bottom: -40px; right: -40px; transform: rotate(180deg); }
+
+        button { font-family: inherit; }
+
+        /* Stars */
+        .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.4); }
+        }
+
+        .moon {
+            position: fixed;
+            top: 30px; right: 60px;
+            width: 70px; height: 70px;
+            background: radial-gradient(circle at 35% 35%, #fff9c4, #fdd835);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(253, 216, 53, 0.4), 0 0 80px rgba(253, 216, 53, 0.2);
+            z-index: 1;
+        }
+
+        .ground {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%; height: 100px;
+            background: linear-gradient(0deg, #1a0a30 0%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ============ LEVEL SELECT ============ */
+        /* Outer: scroll container only — never a flex parent.
+           Inner: flex parent with min-height so centering works on tall
+           viewports but content overflows naturally on short ones. */
+        .level-select {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .level-select.hidden { display: none; }
+
+        .ls-content {
+            min-height: 100%;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .ls-header { text-align: center; margin-bottom: 30px; }
+        .ls-header h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f093fb, #f5576c, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            letter-spacing: -1px;
+        }
+        .ls-header p {
+            color: rgba(255,255,255,0.55);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* Character select */
+        .char-select {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .cs-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .cs-cards {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cs-card {
+            position: relative;
+            width: 130px;
+            padding: 16px 12px;
+            background: rgba(255,255,255,0.04);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .cs-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .cs-card.selected {
+            background: linear-gradient(135deg, rgba(245, 87, 108, 0.2), rgba(118, 75, 162, 0.2));
+            border-color: var(--accent-pink);
+            box-shadow: 0 8px 28px rgba(245, 87, 108, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        body[data-skin="spiderman"] .cs-card.selected {
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.25), rgba(41, 98, 255, 0.25));
+            border-color: #ff1744;
+            box-shadow: 0 8px 28px rgba(255, 23, 68, 0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .cs-card .cs-emoji {
+            font-size: 2.6rem;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+
+        .cs-card .cs-name {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .cs-card .cs-tagline {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.45);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .cs-card .cs-check {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-pink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cs-card.selected .cs-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        body[data-skin="spiderman"] .cs-card .cs-check {
+            background: #ff1744;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            max-width: 920px;
+            width: 100%;
+        }
+
+        .level-card {
+            position: relative;
+            padding: 18px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .level-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.09);
+            border-color: rgba(245, 87, 108, 0.4);
+            box-shadow: 0 12px 40px rgba(245, 87, 108, 0.2);
+        }
+
+        .level-card.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .level-card.locked:hover { transform: none; }
+
+        .level-card .lc-num {
+            position: absolute;
+            top: 8px; left: 10px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+        }
+        .level-card .lc-icon {
+            font-size: 1.8rem;
+            margin: 6px 0 8px;
+        }
+        .level-card .lc-name {
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        .level-card .lc-sub {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.45);
+            font-weight: 600;
+            line-height: 1.3;
+            min-height: 28px;
+        }
+        .level-card .lc-keys {
+            margin-top: 8px;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+        }
+        .level-card .lc-best {
+            margin-top: 6px;
+            font-size: 0.7rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ============ GAME ============ */
+        .game-container {
+            position: relative;
+            width: 100%; height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+        }
+        .game-container.hidden { display: none; }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .gh-left, .gh-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .menu-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        .level-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        .level-info .li-icon { font-size: 1rem; }
+
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .stat-pill .sp-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-pill .sp-value { color: white; font-size: 0.95rem; }
+        .stat-pill.score .sp-value { color: var(--gold); }
+        .stat-pill.wpm .sp-value { color: var(--accent-cyan); }
+        .stat-pill.acc .sp-value { color: var(--accent-green); }
+        .stat-pill.streak .sp-value { color: var(--accent-orange); }
+
+        /* Main game area */
+        .game-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            min-height: 0;
+        }
+
+        /* Staircase */
+        .staircase-area {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        /* Flex-based staircase: each step is a flex item with fixed width.
+           Cards never overlap (gap separates them) and overflow horizontally
+           on narrow screens with smooth touch scrolling. The staircase shape
+           is created by translateY(-rise * idx) on each step. */
+        .staircase {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+            height: 280px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;       /* fallback */
+            justify-content: safe center;      /* center when fits, flex-start when overflowing */
+            gap: 6px;
+            padding: 0 16px 8px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+        }
+        .staircase::-webkit-scrollbar { height: 6px; }
+        .staircase::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+        .step {
+            position: relative;
+            flex: 0 0 var(--step-w, 80px);
+            height: 38px;
+            transform: translateY(calc(-1 * var(--rise, 18px) * var(--idx, 0)));
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .step-block {
+            width: 100%;
+            padding: 0 14px;
+            height: 38px;
+            background: linear-gradient(135deg, #2d1b69, #1a3854);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 0 #1a1040, 0 6px 16px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.08);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed .step-block {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            box-shadow: 0 4px 0 #0d7a5f, 0 6px 16px rgba(56, 239, 125, 0.3);
+        }
+
+        .step.active .step-block {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-red));
+            box-shadow: 0 4px 0 #c44569, 0 6px 20px rgba(245, 87, 108, 0.5);
+            animation: stepPulse 1.5s ease-in-out infinite;
+            transform: scale(1.08);
+        }
+
+        /* Sentence levels need smaller text — long words otherwise overflow */
+        .staircase.sentences .step-word {
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { box-shadow: 0 4px 0 #c44569, 0 6px 20px rgba(245, 87, 108, 0.5); }
+            50% { box-shadow: 0 4px 0 #c44569, 0 6px 28px rgba(245, 87, 108, 0.7), 0 0 40px rgba(245, 87, 108, 0.3); }
+        }
+
+        .step-word {
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+
+        .character {
+            position: absolute;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+        }
+
+        .character-body {
+            font-size: 40px;
+            animation: charIdle 2s ease-in-out infinite;
+        }
+
+        @keyframes charIdle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .character.jumping .character-body {
+            animation: charJump 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes charJump {
+            0% { transform: translateY(0) scale(1); }
+            30% { transform: translateY(-25px) scale(1.1) rotate(-8deg); }
+            60% { transform: translateY(-8px) scale(0.95); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .finish-flag {
+            position: absolute;
+            font-size: 28px;
+            transform: translate(-50%, -100%);
+            animation: flagWave 1s ease-in-out infinite;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+        }
+
+        @keyframes flagWave {
+            0%, 100% { transform: translate(-50%, -100%) rotate(-3deg); }
+            50% { transform: translate(-50%, -100%) rotate(3deg); }
+        }
+
+        /* Input zone */
+        .input-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 0;
+        }
+
+        .word-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            min-height: 50px;
+        }
+
+        .wd-char {
+            display: inline-block;
+            min-width: 24px;
+            text-align: center;
+            transition: all 0.2s ease;
+            color: rgba(255,255,255,0.35);
+            position: relative;
+        }
+        .wd-char.done {
+            color: var(--accent-green);
+        }
+        .wd-char.current {
+            color: white;
+            transform: scale(1.15);
+        }
+        .wd-char.current::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--accent-pink);
+            border-radius: 2px;
+            animation: caretBlink 1s ease-in-out infinite;
+        }
+
+        @keyframes caretBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .word-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 1px;
+            height: 1px;
+        }
+
+        .progress-bar-wrap {
+            width: 320px;
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-pink));
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 10px rgba(118, 75, 162, 0.5);
+        }
+
+        .input-status {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+            min-height: 18px;
+        }
+        .input-status.wrong { color: var(--accent-red); animation: shake 0.4s ease; }
+        .input-status.altgr { color: var(--accent-cyan); }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* ============ KEYBOARD ============ */
+        .keyboard-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 14px;
+            background: rgba(0,0,0,0.25);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .kb-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        .kb-key {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.08);
+            border-bottom: 3px solid rgba(0,0,0,0.4);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            transition: all 0.15s ease;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .kb-key.wide-1-25 { width: 50px; }
+        .kb-key.wide-1-5 { width: 60px; }
+        .kb-key.wide-1-75 { width: 72px; }
+        .kb-key.wide-2 { width: 82px; }
+        .kb-key.wide-2-25 { width: 90px; }
+        .kb-key.wide-space { width: 240px; }
+
+        .kb-key .kb-altgr {
+            position: absolute;
+            top: 3px;
+            right: 4px;
+            font-size: 0.55rem;
+            color: var(--accent-cyan);
+            opacity: 0.6;
+            font-weight: 700;
+        }
+
+        .kb-key .kb-finger-bar {
+            position: absolute;
+            bottom: -3px;
+            left: 4px;
+            right: 4px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--finger-color);
+            opacity: 0.9;
+        }
+
+        .kb-key.next {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-red));
+            border-color: rgba(255,255,255,0.4);
+            color: white;
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+            animation: keyPulse 1s ease-in-out infinite;
+        }
+        @keyframes keyPulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5), inset 0 1px 0 rgba(255,255,255,0.2); }
+            50% { box-shadow: 0 8px 28px rgba(245, 87, 108, 0.8), inset 0 1px 0 rgba(255,255,255,0.3); }
+        }
+
+        .kb-key.altgr-needed {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-color: rgba(255,255,255,0.4);
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 16px rgba(79, 172, 254, 0.5);
+        }
+
+        .kb-key.pressed {
+            transform: translateY(2px) scale(0.96);
+            border-bottom-width: 1px;
+        }
+
+        /* Hand label */
+        .hand-legend {
+            display: flex;
+            gap: 18px;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
+        }
+        .hand-legend .leg-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .hand-legend .leg-dot {
+            width: 8px; height: 8px;
+            border-radius: 2px;
+        }
+
+        /* Streak floating */
+        .streak {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            background: linear-gradient(135deg, rgba(253, 160, 133, 0.2), rgba(245, 87, 108, 0.2));
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 8px 14px;
+            border: 1px solid rgba(253, 160, 133, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+            z-index: 5;
+        }
+        .streak.visible { opacity: 1; transform: translateX(0); }
+        .streak-fire { font-size: 1.2rem; animation: fireWiggle 0.6s ease-in-out infinite; }
+        @keyframes fireWiggle {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+        .streak-count { color: var(--accent-orange); font-weight: 800; font-size: 1.1rem; }
+        .streak-label { color: rgba(255,255,255,0.6); font-size: 0.75rem; font-weight: 600; }
+
+        /* ============ CELEBRATION ============ */
+        .celebration {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: rgba(15, 12, 41, 0.92);
+            backdrop-filter: blur(15px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .celebration.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .celeb-card {
+            background: linear-gradient(135deg, rgba(45, 27, 105, 0.6), rgba(83, 52, 131, 0.6));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 40px 48px;
+            text-align: center;
+            min-width: 480px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: celebIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+
+        @keyframes celebIn {
+            from { transform: scale(0.8) translateY(20px); opacity: 0; }
+        }
+
+        .celeb-emoji {
+            font-size: 4rem;
+            margin-bottom: 4px;
+            animation: emojiPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+        @keyframes emojiPop {
+            from { transform: scale(0); }
+        }
+
+        .celeb-card h2 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f093fb, #f5576c, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .celeb-card .celeb-msg {
+            color: rgba(255,255,255,0.65);
+            font-size: 1rem;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .celeb-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .celeb-stat {
+            background: rgba(255,255,255,0.06);
+            padding: 12px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .celeb-stat .cs-label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .celeb-stat .cs-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        .celeb-stat.score .cs-value { color: var(--gold); }
+        .celeb-stat.wpm .cs-value { color: var(--accent-cyan); }
+        .celeb-stat.acc .cs-value { color: var(--accent-green); }
+
+        .celeb-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .celeb-btn {
+            background: rgba(255,255,255,0.06);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            min-width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .celeb-btn .btn-hint {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .celeb-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .celeb-btn.primary {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-red));
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+        .celeb-btn.primary:hover {
+            box-shadow: 0 8px 28px rgba(245, 87, 108, 0.6);
+        }
+
+        .celeb-btn.focused {
+            border-color: rgba(255,255,255,0.6);
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
+        }
+        .celeb-btn.primary.focused {
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.7), 0 0 0 3px rgba(255,255,255,0.3);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 99;
+            animation: confettiFall var(--fall-duration) linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(var(--rotation)); opacity: 0; }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: particleFloat 1s ease-out forwards;
+        }
+        @keyframes particleFloat {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .level-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 850px) {
+            .level-grid { grid-template-columns: repeat(2, 1fr); }
+            .staircase { height: 240px; }
+            .step-block { height: 32px; }
+            .step { height: 32px; }
+            .step-word { font-size: 0.9rem; }
+            .character-body { font-size: 32px; }
+            .word-display { font-size: 1.6rem; }
+            .kb-key { width: 32px; height: 32px; font-size: 0.75rem; }
+            .kb-key.wide-space { width: 200px; }
+            .ls-header h1 { font-size: 2.2rem; }
+            .celeb-card { min-width: auto; padding: 28px 24px; }
+            .ls-content { padding: 24px 14px; }
+            .char-select { margin-bottom: 20px; }
+            .cs-card { width: 110px; padding: 12px 8px; }
+            .cs-card .cs-emoji { font-size: 2.1rem; }
+            .level-card { padding: 14px 10px; }
+            .level-card .lc-icon { font-size: 1.5rem; }
+            .level-card .lc-name { font-size: 0.85rem; }
+            .level-card .lc-sub { font-size: 0.65rem; min-height: 24px; }
+        }
+        @media (max-width: 420px) {
+            .ls-content { padding: 18px 10px; }
+            .ls-header h1 { font-size: 1.8rem; }
+            .ls-header p { font-size: 0.9rem; }
+            .cs-cards { gap: 10px; }
+            .cs-card { width: 95px; padding: 10px 6px; }
+            .cs-card .cs-emoji { font-size: 1.8rem; }
+            .cs-card .cs-name { font-size: 0.8rem; }
+            .cs-card .cs-tagline { font-size: 0.62rem; }
+            .level-grid { gap: 10px; }
+            .level-card .lc-keys { font-size: 0.65rem; padding: 3px 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="moon"></div>
+    <div class="ground"></div>
+
+    <!-- Spider-Man web decorations (only show on spiderman skin) -->
+    <svg class="web-decor tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="white" stroke-width="1.2" fill="none">
+            <path d="M0,0 L200,200"/><path d="M0,0 L200,100"/><path d="M0,0 L100,200"/>
+            <path d="M0,0 L200,50"/><path d="M0,0 L50,200"/><path d="M0,0 L200,150"/><path d="M0,0 L150,200"/>
+            <path d="M0,0 Q40,40 80,40 T160,80"/><path d="M0,0 Q60,30 80,80 T140,140"/>
+            <path d="M0,0 Q30,60 60,60 T120,120 T180,180"/><path d="M0,0 Q90,30 120,90 T180,170"/>
+            <path d="M0,0 Q40,80 80,80 T140,140"/><path d="M0,0 Q70,50 100,100 T180,180"/>
+        </g>
+    </svg>
+    <svg class="web-decor tr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="white" stroke-width="1.2" fill="none">
+            <path d="M0,0 L200,200"/><path d="M0,0 L200,100"/><path d="M0,0 L100,200"/>
+            <path d="M0,0 L200,50"/><path d="M0,0 L50,200"/><path d="M0,0 L200,150"/><path d="M0,0 L150,200"/>
+            <path d="M0,0 Q40,40 80,40 T160,80"/><path d="M0,0 Q60,30 80,80 T140,140"/>
+            <path d="M0,0 Q30,60 60,60 T120,120 T180,180"/><path d="M0,0 Q90,30 120,90 T180,170"/>
+        </g>
+    </svg>
+    <svg class="web-decor bl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="white" stroke-width="1.2" fill="none">
+            <path d="M0,0 L200,200"/><path d="M0,0 L200,100"/><path d="M0,0 L100,200"/>
+            <path d="M0,0 L200,50"/><path d="M0,0 L50,200"/>
+            <path d="M0,0 Q40,40 80,40 T160,80"/><path d="M0,0 Q60,30 80,80 T140,140"/>
+            <path d="M0,0 Q30,60 60,60 T120,120 T180,180"/>
+        </g>
+    </svg>
+    <svg class="web-decor br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="white" stroke-width="1.2" fill="none">
+            <path d="M0,0 L200,200"/><path d="M0,0 L200,100"/><path d="M0,0 L100,200"/>
+            <path d="M0,0 L200,50"/><path d="M0,0 L50,200"/>
+            <path d="M0,0 Q40,40 80,40 T160,80"/><path d="M0,0 Q60,30 80,80 T140,140"/>
+        </g>
+    </svg>
+
+    <!-- Mavuika flame decorations -->
+    <div class="flame-decor fl-1">🔥</div>
+    <div class="flame-decor fl-2">🔥</div>
+    <div class="flame-decor fl-3">🔥</div>
+    <div class="flame-decor fl-4">🔥</div>
+
+    <!-- LEVEL SELECT -->
+    <div class="level-select" id="levelSelect">
+        <div class="ls-content">
+            <div class="ls-header">
+                <h1>Burtu Trepe</h1>
+                <p>Mācies rakstīt latviski — solis pa solim</p>
+            </div>
+
+            <div class="char-select">
+                <div class="cs-title">Izvēlies varoni</div>
+                <div class="cs-cards" id="charCards">
+                    <div class="cs-card selected" data-skin="default">
+                        <div class="cs-check">✓</div>
+                        <div class="cs-emoji">🧒</div>
+                        <div class="cs-name">Bērns</div>
+                        <div class="cs-tagline">Klasiskais</div>
+                    </div>
+                    <div class="cs-card" data-skin="spiderman">
+                        <div class="cs-check">✓</div>
+                        <div class="cs-emoji">🕷️</div>
+                        <div class="cs-name">Spaidermens</div>
+                        <div class="cs-tagline">Sarkans + zils</div>
+                    </div>
+                    <div class="cs-card" data-skin="mavuika">
+                        <div class="cs-check">✓</div>
+                        <div class="cs-emoji">🌋</div>
+                        <div class="cs-name">Mavuika</div>
+                        <div class="cs-tagline">Pyro Archon</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-grid" id="levelGrid"></div>
+        </div>
+    </div>
+
+    <!-- GAME -->
+    <div class="game-container hidden" id="gameContainer">
+        <div class="game-header">
+            <div class="gh-left">
+                <button class="menu-btn" onclick="backToMenu()">← Izvēlne</button>
+                <div class="level-info">
+                    <span class="li-icon" id="liIcon">🌱</span>
+                    <span id="liName">1. līmenis</span>
+                </div>
+            </div>
+            <div class="gh-right">
+                <div class="stat-pill score">
+                    <span class="sp-label">⭐</span>
+                    <span class="sp-value" id="scoreVal">0</span>
+                </div>
+                <div class="stat-pill wpm" id="wpmPill">
+                    <span class="sp-label">WPM</span>
+                    <span class="sp-value" id="wpmVal">0</span>
+                </div>
+                <div class="stat-pill acc" id="accPill">
+                    <span class="sp-label">Akur.</span>
+                    <span class="sp-value" id="accVal">100%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-main">
+            <div class="staircase-area">
+                <div class="staircase" id="staircase"></div>
+            </div>
+
+            <div class="input-zone">
+                <div class="word-display" id="wordDisplay"></div>
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+                </div>
+                <div class="input-status" id="inputStatus"></div>
+                <input type="text" class="word-input" id="wordInput" autocomplete="off" autocapitalize="off" spellcheck="false">
+            </div>
+
+            <div class="keyboard-wrap" id="keyboardWrap"></div>
+        </div>
+    </div>
+
+    <!-- Streak -->
+    <div class="streak" id="streakDisplay">
+        <span class="streak-fire">🔥</span>
+        <span class="streak-count" id="streakCount">0</span>
+        <span class="streak-label">pēc kārtas!</span>
+    </div>
+
+    <!-- Celebration -->
+    <div class="celebration" id="celebration">
+        <div class="celeb-card">
+            <div class="celeb-emoji" id="celebEmoji">🎉</div>
+            <h2 id="celebTitle">Lieliski!</h2>
+            <div class="celeb-msg" id="celebMsg">Tu pabeidzi līmeni!</div>
+            <div class="celeb-stats">
+                <div class="celeb-stat score">
+                    <div class="cs-label">Punkti</div>
+                    <div class="cs-value" id="csScore">0</div>
+                </div>
+                <div class="celeb-stat wpm">
+                    <div class="cs-label">WPM</div>
+                    <div class="cs-value" id="csWpm">0</div>
+                </div>
+                <div class="celeb-stat acc">
+                    <div class="cs-label">Akurātums</div>
+                    <div class="cs-value" id="csAcc">100%</div>
+                </div>
+            </div>
+            <div class="celeb-buttons" id="celebButtons">
+                <button class="celeb-btn" data-action="menu">
+                    <span>← Izvēlne</span>
+                    <span class="btn-hint">A / ←</span>
+                </button>
+                <button class="celeb-btn primary focused" data-action="replay">
+                    <span>↻ Atkārtot</span>
+                    <span class="btn-hint">ENTER</span>
+                </button>
+                <button class="celeb-btn" data-action="next">
+                    <span>Nākamais →</span>
+                    <span class="btn-hint">D / →</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ============================================
+// SKINS
+// ============================================
+const SKINS = {
+    default: { char: '🧒', name: 'Bērns' },
+    spiderman: { char: '🕷️', name: 'Spaidermens' },
+    mavuika: { char: '🔥', name: 'Mavuika' }
+};
+
+let currentSkin = localStorage.getItem('burtuTrepe_skin') || 'default';
+
+function applySkin(skin) {
+    if (!SKINS[skin]) skin = 'default';
+    currentSkin = skin;
+    localStorage.setItem('burtuTrepe_skin', skin);
+    if (skin === 'default') {
+        document.body.removeAttribute('data-skin');
+    } else {
+        document.body.dataset.skin = skin;
+    }
+    document.querySelectorAll('.cs-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.skin === skin);
+    });
+    const charBody = document.querySelector('.character-body');
+    if (charBody) charBody.textContent = SKINS[skin].char;
+}
+
+document.querySelectorAll('.cs-card').forEach(c => {
+    c.onclick = () => applySkin(c.dataset.skin);
+});
+
+// ============================================
+// FINGER MAPPING
+// ============================================
+const FINGERS = {
+    LP: { color: 'var(--finger-LP)', name: 'Kreisais mazais' },
+    LR: { color: 'var(--finger-LR)', name: 'Kreisais zeltnes' },
+    LM: { color: 'var(--finger-LM)', name: 'Kreisais vidējais' },
+    LI: { color: 'var(--finger-LI)', name: 'Kreisais rādītāj.' },
+    RI: { color: 'var(--finger-RI)', name: 'Labais rādītāj.' },
+    RM: { color: 'var(--finger-RM)', name: 'Labais vidējais' },
+    RR: { color: 'var(--finger-RR)', name: 'Labais zeltnes' },
+    RP: { color: 'var(--finger-RP)', name: 'Labais mazais' },
+    TH: { color: 'var(--finger-TH)', name: 'Īkšķis' }
+};
+
+const KEY_FINGER = {
+    '1':'LP','2':'LR','3':'LM','4':'LI','5':'LI',
+    '6':'RI','7':'RI','8':'RM','9':'RR','0':'RP',
+    'q':'LP','w':'LR','e':'LM','r':'LI','t':'LI',
+    'y':'RI','u':'RI','i':'RM','o':'RR','p':'RP',
+    'a':'LP','s':'LR','d':'LM','f':'LI','g':'LI',
+    'h':'RI','j':'RI','k':'RM','l':'RR',';':'RP',
+    'z':'LP','x':'LR','c':'LM','v':'LI','b':'LI',
+    'n':'RI','m':'RI',',':'RM','.':'RR','/':'RP',
+    ' ':'TH'
+};
+
+// Latvian char → base key (typed via AltGr+key)
+const LV_BASE = {
+    'ā':'a','ē':'e','ī':'i','ū':'u',
+    'č':'c','š':'s','ž':'z',
+    'ļ':'l','ķ':'k','ņ':'n','ģ':'g'
+};
+
+// Base key → AltGr Latvian char (for keyboard display)
+const KEY_ALTGR = {
+    'a':'ā','e':'ē','i':'ī','u':'ū',
+    'c':'č','s':'š','z':'ž',
+    'l':'ļ','k':'ķ','n':'ņ','g':'ģ'
+};
+
+// Keyboard rows
+const KB_ROWS = [
+    [['`'],['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0'],['-'],['='],['⌫','wide-2']],
+    [['Tab','wide-1-5'],['q'],['w'],['e'],['r'],['t'],['y'],['u'],['i'],['o'],['p'],['['],[']'],['\\','wide-1-5']],
+    [['Caps','wide-1-75'],['a'],['s'],['d'],['f'],['g'],['h'],['j'],['k'],['l'],[';'],["'"],['Enter','wide-2-25']],
+    [['Shift','wide-2-25'],['z'],['x'],['c'],['v'],['b'],['n'],['m'],[','],['.'],['/'],['Shift','wide-2-25']],
+    [['Ctrl','wide-1-25'],['Win','wide-1-25'],['Alt','wide-1-25'],['','wide-space'],['AltGr','wide-1-25'],['Win','wide-1-25'],['Menu','wide-1-25'],['Ctrl','wide-1-25']]
+];
+
+// ============================================
+// CURRICULUM DATA — single source of truth
+// ============================================
+const KEY_ROWS = {
+    home:   ['f','j','d','k','a','s','l','g','h'],
+    top:    ['e','i','r','u','t','w','o','p'],
+    bottom: ['v','n','m','b','c','x','z']
+};
+
+const SPECIAL = {
+    garumzīmes:   ['ā','ē','ī','ū'],
+    jumtiņi:      ['č','š','ž'],
+    mīkstinājumi: ['ļ','ķ','ņ','ģ']
+};
+
+// Special chars grouped by which row's base key types them (AltGr + key).
+// Each row gets its own special-char drill so the kid masters that finger
+// position fully (base + diacritic) before moving to the next row.
+const ROW_SPECIALS = {
+    home:   ['ā','š','ģ','ķ','ļ'],   // a→ā, s→š, g→ģ, k→ķ, l→ļ
+    top:    ['ē','ī','ū'],             // e→ē, i→ī, u→ū
+    bottom: ['č','ž','ņ']              // c→č, z→ž, n→ņ
+};
+
+const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ū']);
+
+// Latvian word bank — flat list, filtered at level-build time.
+// Letters used in each word determine which levels include it.
+const WORD_BANK = [
+    // Home row + home specials only (a/ā as vowels; cons f j d k s l g h š ģ ķ ļ)
+    'lasa','saka','gada','sala','kala','halls','salds','gala','dada','sasa',
+    'kā','jā','gāja','kāja','lāga','gads','kāds','klāj','glāsa','sāļš','sals','sāka','glāsta',
+    // Home + Top (no specials)
+    'te','tu','ir','es','ar','iet','ies','iela','esi','lasi','saki','liek','lieta','sieta',
+    'tase','rasa','kura','kuru','laiks','sirds',
+    'ola','upe','pile','lapa','pase','ote','tope','opera','papete','lopi','plate',
+    // Home + Top + Garumzīmes (no bottom row)
+    'rīts','tētis','pīle','lāse','lasīt','kāpt','īsts','lūk','pār','tā','ēd','ēdi','lapā',
+    'jūra','tālāk',
+    // Home + Top + Bottom (no specials)
+    'nav','var','mums','nams','mute','vista','vakar','vecs','centrs','cepa','celms','zem','zila','zivs','zinu',
+    'bumba','balons','putns','govis','ceps','rams','redzu',
+    // With garumzīmes (any letters)
+    'māja','māsa','pūce','dārzs','ēna','sēne','mēness','grāmata','ābols','vasara','dāvana',
+    // With jumtiņi
+    'čaula','čempions','šis','šovs','šauj','žurka','žagari','ežu','vējš','dvēsele','šokolāde','čīkst','žokejs',
+    // With mīkstinājumi
+    'ķirsis','daļa','saliņa','ģimene','ņem','ļauj','ķēve','eņģelis','ļoti','gaņģis','draņķis','mīļais'
+];
+
+const SENTENCES = [
+    'saule spīd debesīs',
+    'māte cep maizi',
+    'kaķis spēlējas dārzā',
+    'bērni iet uz skolu',
+    'ziedi smaržo skaisti',
+    'putni dzied kokos',
+    'lietus līst pavasarī',
+    'māja stāv uz kalna'
+];
+
+// ============================================
+// HELPERS — single responsibility per function
+// ============================================
+function lowChars(s) { return [...s.toLowerCase()]; }
+
+function usesOnly(word, pool) {
+    const set = new Set(pool);
+    return lowChars(word).every(c => set.has(c) || c === ' ');
+}
+
+function containsAny(word, required) {
+    const set = new Set(required);
+    return lowChars(word).some(c => set.has(c));
+}
+
+function uniq(arr) { return [...new Set(arr)]; }
+
+// ============================================
+// CONTENT GENERATORS — produce drill content from letter lists
+// ============================================
+
+// Letter drill: each letter gets a focused triple, then alternation pairs.
+// Small sets (<=5) get every pair combination for thorough practice;
+// larger sets get adjacent pairs only to avoid bloat. Triples come first
+// so every letter is drilled before any combinations appear.
+function letterDrill(letters) {
+    const out = letters.map(l => l + l + l);
+    const n = letters.length;
+    if (n <= 5) {
+        for (let i = 0; i < n; i++) {
+            for (let j = i + 1; j < n; j++) {
+                out.push(letters[i] + letters[j] + letters[i] + letters[j]);
+            }
+        }
+    } else {
+        for (let i = 0; i < n - 1; i += 2) {
+            if (letters[i + 1]) {
+                out.push(letters[i] + letters[i + 1] + letters[i] + letters[i + 1]);
+            }
+        }
+    }
+    return out;
+}
+
+// Generate 2-letter syllables that always include at least one of the
+// "new" letters (e.g. row's special chars), drawing partners from the
+// full pool of letters known so far. Round-robins by new letter so each
+// gets equal coverage in the first N items the kid sees.
+function syllablesIncluding(newLetters, fullPool) {
+    const pool = uniq(fullPool);
+    const vowels = pool.filter(l => VOWELS.has(l));
+    const consonants = pool.filter(l => !VOWELS.has(l));
+    const groups = newLetters.map(nl => {
+        const arr = [];
+        if (VOWELS.has(nl)) {
+            consonants.forEach(c => arr.push(c + nl, nl + c));
+        } else {
+            vowels.forEach(v => arr.push(nl + v, v + nl));
+        }
+        return arr;
+    });
+    const seen = new Set();
+    const result = [];
+    const maxLen = Math.max(...groups.map(g => g.length), 0);
+    for (let i = 0; i < maxLen; i++) {
+        groups.forEach(g => {
+            if (i < g.length && !seen.has(g[i])) {
+                seen.add(g[i]);
+                result.push(g[i]);
+            }
+        });
+    }
+    return result;
+}
+
+// Syllable drill: cons+vowel and vowel+cons from a letter pool.
+// If the pool has no vowels (e.g. bottom row), mix with extraVowels.
+// Interleaves by vowel so every consonant is practiced before moving on.
+function syllableDrill(letters, extraVowels = []) {
+    const pool = uniq(letters);
+    const vowels = pool.filter(l => VOWELS.has(l));
+    const consonants = pool.filter(l => !VOWELS.has(l));
+    const allVowels = uniq([...vowels, ...extraVowels]);
+    const seen = new Set();
+    const out = [];
+    allVowels.forEach(v => consonants.forEach(c => {
+        for (const s of [c + v, v + c]) {
+            if (!seen.has(s)) { seen.add(s); out.push(s); }
+        }
+    }));
+    return out;
+}
+
+// ============================================
+// WORD FILTERS — select from WORD_BANK by allowed/required chars
+// ============================================
+function wordsUsingOnly(allowed) {
+    return WORD_BANK.filter(w => usesOnly(w, allowed));
+}
+
+function wordsRequiringAny(required, allowed) {
+    return WORD_BANK.filter(w => containsAny(w, required) && usesOnly(w, allowed));
+}
+
+// ============================================
+// LEVELS — declarative configuration only
+// ============================================
+const LEVELS = (() => {
+    const { home, top, bottom } = KEY_ROWS;
+    const homeSpec = ROW_SPECIALS.home;
+    const topSpec  = ROW_SPECIALS.top;
+    const botSpec  = ROW_SPECIALS.bottom;
+
+    // Cumulative pools as the kid progresses through the curriculum
+    const homeAll      = uniq([...home, ...homeSpec]);
+    const homeTopAll   = uniq([...homeAll, ...top, ...topSpec]);
+    const allChars     = uniq([...homeTopAll, ...bottom, ...botSpec]);
+
+    return [
+        // -- Phase 1: Mājas rinda --
+        { n: 1,  name: "Mājas burti",        sub: "F J D K A S L G H — pa vienam",
+          icon: "👆", keysShown: "F J D K A S L G H",
+          words: letterDrill(home), steps: 13, drill: true },
+
+        { n: 2,  name: "Mājas zilbes",        sub: "Zilbes ar mājas rindas burtiem",
+          icon: "🔡", keysShown: "mājas zilbes",
+          words: syllableDrill(home), steps: 10, drill: true },
+
+        { n: 3,  name: "Mājas spec. burti",   sub: "Ā Š Ģ Ķ Ļ — AltGr + burts",
+          icon: "📏", keysShown: "Ā Š Ģ Ķ Ļ",
+          words: letterDrill(homeSpec), steps: 10, drill: true, altGrTip: true },
+
+        { n: 4,  name: "Mājas spec. zilbes",  sub: "Zilbes ar Ā Š Ģ Ķ Ļ",
+          icon: "🔡", keysShown: "mājas + Ā Š Ģ Ķ Ļ",
+          words: syllablesIncluding(homeSpec, homeAll), steps: 10, drill: true, altGrTip: true },
+
+        { n: 5,  name: "Mājas vārdi",         sub: "Vārdi no mājas rindas",
+          icon: "🏠", keysShown: "mājas vārdi",
+          words: wordsUsingOnly(homeAll), steps: 8 },
+
+        // -- Phase 2: Augšējā rinda --
+        { n: 6,  name: "Augšējās burti",      sub: "E I R U T W O P — pa vienam",
+          icon: "👆", keysShown: "E I R U T W O P",
+          words: letterDrill(top), steps: 12, drill: true },
+
+        { n: 7,  name: "Augšējās zilbes",     sub: "Zilbes ar augšējās rindas burtiem",
+          icon: "🔡", keysShown: "augšējās zilbes",
+          words: syllableDrill(top), steps: 10, drill: true },
+
+        { n: 8,  name: "Augšējās garumzīmes", sub: "Ē Ī Ū — AltGr + burts",
+          icon: "📏", keysShown: "Ē Ī Ū",
+          words: letterDrill(topSpec), steps: 6, drill: true, altGrTip: true },
+
+        { n: 9,  name: "Augšējās spec. zilbes", sub: "Zilbes ar Ē Ī Ū",
+          icon: "🔡", keysShown: "augšējās + Ē Ī Ū",
+          words: syllablesIncluding(topSpec, homeTopAll), steps: 10, drill: true, altGrTip: true },
+
+        { n: 10, name: "Mājas + Augšējā",     sub: "Vārdi no abām rindām (ar visām spec.)",
+          icon: "🌿", keysShown: "mājas + augšējā vārdi",
+          words: wordsRequiringAny([...top, ...topSpec], homeTopAll), steps: 10, showWPM: true },
+
+        // -- Phase 3: Apakšējā rinda --
+        { n: 11, name: "Apakšējās burti",     sub: "V N M B C X Z — pa vienam",
+          icon: "👇", keysShown: "V N M B C X Z",
+          words: letterDrill(bottom), steps: 10, drill: true },
+
+        { n: 12, name: "Apakšējās zilbes",    sub: "Zilbes ar visiem patskaņiem",
+          icon: "🔡", keysShown: "apakšējās zilbes",
+          words: syllableDrill(bottom, ['a','e','i','o','u']), steps: 10, drill: true },
+
+        { n: 13, name: "Apakšējās speciālie", sub: "Č Ž Ņ — AltGr + burts",
+          icon: "🎩", keysShown: "Č Ž Ņ",
+          words: letterDrill(botSpec), steps: 6, drill: true, altGrTip: true },
+
+        { n: 14, name: "Apakšējās spec. zilbes", sub: "Zilbes ar Č Ž Ņ",
+          icon: "🔡", keysShown: "apakšējās + Č Ž Ņ",
+          words: syllablesIncluding(botSpec, allChars), steps: 10, drill: true, altGrTip: true },
+
+        { n: 15, name: "Visu rindu vārdi",    sub: "Vārdi no visām 3 rindām",
+          icon: "🏔️", keysShown: "visi vārdi",
+          words: wordsRequiringAny([...bottom, ...botSpec], allChars), steps: 10, showWPM: true },
+
+        // -- Phase 4: Ātrums --
+        { n: 16, name: "Teikumi",             sub: "Pilni teikumi — ātruma posms",
+          icon: "🚀", keysShown: "viss",
+          words: SENTENCES, steps: 6, showWPM: true, isSentence: true }
+    ];
+})();
+
+// ============================================
+// STATE
+// ============================================
+let currentLevelIdx = 0;
+let currentStep = 0;
+let roundWords = [];
+let typedSoFar = '';
+let score = 0;
+let streak = 0;
+let isAnimating = false;
+let levelStartTime = 0;
+let totalCorrectChars = 0;
+let totalKeystrokes = 0;
+let levelMistakes = 0;
+let bestScores = JSON.parse(localStorage.getItem('burtuTrepe_best') || '{}');
+let unlocked = JSON.parse(localStorage.getItem('burtuTrepe_unlocked') || '[1]');
+let wordDifficulty = JSON.parse(localStorage.getItem('burtuTrepe_diff') || '{}');
+let celebFocusedBtn = 'replay';
+
+// ============================================
+// AUDIO
+// ============================================
+let audioCtx;
+function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+function tone(freq, dur, type='sine', vol=0.12) {
+    ensureAudio();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + dur);
+}
+function sndKey() { tone(800 + Math.random()*200, 0.04, 'sine', 0.04); }
+function sndCorrect() {
+    tone(523, 0.12, 'sine', 0.1);
+    setTimeout(()=>tone(659, 0.12, 'sine', 0.1), 70);
+    setTimeout(()=>tone(784, 0.18, 'sine', 0.1), 140);
+}
+function sndWrong() { tone(180, 0.2, 'square', 0.05); }
+function sndComplete() {
+    [523, 587, 659, 698, 784, 880, 988, 1047].forEach((f,i) =>
+        setTimeout(()=>tone(f, 0.18, 'sine', 0.09), i*70));
+}
+
+// ============================================
+// LEVEL SELECT
+// ============================================
+function buildLevelSelect() {
+    const grid = document.getElementById('levelGrid');
+    grid.innerHTML = '';
+    LEVELS.forEach((lvl, idx) => {
+        const isUnlocked = unlocked.includes(lvl.n);
+        const best = bestScores[lvl.n];
+        const card = document.createElement('div');
+        card.className = 'level-card' + (isUnlocked ? '' : ' locked');
+        card.innerHTML = `
+            <div class="lc-num">${String(lvl.n).padStart(2,'0')}</div>
+            <div class="lc-icon">${isUnlocked ? lvl.icon : '🔒'}</div>
+            <div class="lc-name">${lvl.name}</div>
+            <div class="lc-sub">${lvl.sub}</div>
+            <div class="lc-keys">${lvl.keysShown}</div>
+            ${best ? `<div class="lc-best">★ ${best.score} · ${best.wpm} WPM</div>` : ''}
+        `;
+        if (isUnlocked) {
+            card.onclick = () => startLevel(idx);
+        }
+        grid.appendChild(card);
+    });
+}
+
+// ============================================
+// KEYBOARD VIZ
+// ============================================
+function buildKeyboard() {
+    const wrap = document.getElementById('keyboardWrap');
+    wrap.innerHTML = '';
+    KB_ROWS.forEach(row => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'kb-row';
+        row.forEach(([key, cls]) => {
+            const k = document.createElement('div');
+            k.className = 'kb-key' + (cls ? ' ' + cls : '');
+            const lower = key.toLowerCase();
+            const finger = KEY_FINGER[lower];
+            if (finger) {
+                k.style.setProperty('--finger-color', `var(--finger-${finger})`);
+                k.innerHTML = `<span>${key.toUpperCase()}</span>`;
+                if (KEY_ALTGR[lower]) {
+                    k.innerHTML += `<span class="kb-altgr">${KEY_ALTGR[lower].toUpperCase()}</span>`;
+                }
+                k.innerHTML += `<span class="kb-finger-bar"></span>`;
+            } else {
+                k.innerHTML = `<span style="font-size:0.7rem;color:rgba(255,255,255,0.5)">${key}</span>`;
+            }
+            k.dataset.key = lower;
+            rowEl.appendChild(k);
+        });
+        wrap.appendChild(rowEl);
+    });
+}
+
+function highlightNextKey() {
+    document.querySelectorAll('.kb-key').forEach(k => {
+        k.classList.remove('next', 'altgr-needed');
+    });
+    if (currentStep >= roundWords.length) return;
+    const word = roundWords[currentStep];
+    if (typedSoFar.length >= word.length) return;
+    let nextChar = word[typedSoFar.length].toLowerCase();
+    let needsAltGr = false;
+
+    if (LV_BASE[nextChar]) {
+        needsAltGr = true;
+        nextChar = LV_BASE[nextChar];
+    }
+    if (nextChar === ' ') nextChar = '';
+
+    document.querySelectorAll('.kb-key').forEach(k => {
+        if (k.dataset.key === nextChar) {
+            k.classList.add('next');
+        }
+        if (needsAltGr && k.dataset.key === 'altgr') {
+            k.classList.add('altgr-needed');
+        }
+    });
+}
+
+function flashKey(char) {
+    const k = char.toLowerCase();
+    const baseChar = LV_BASE[k] || k;
+    const el = document.querySelector(`.kb-key[data-key="${baseChar}"]`);
+    if (el) {
+        el.classList.add('pressed');
+        setTimeout(() => el.classList.remove('pressed'), 100);
+    }
+}
+
+// ============================================
+// GAME
+// ============================================
+function pickWords(level) {
+    // Drill levels keep their generated progression order — no shuffling.
+    if (level.drill) {
+        return level.words.slice(0, level.steps);
+    }
+
+    const all = [...level.words];
+    // Adaptive: weight harder words higher
+    const weighted = [];
+    all.forEach(w => {
+        const diff = wordDifficulty[w] || 0;
+        const copies = 1 + Math.min(diff, 3);
+        for (let i=0; i<copies; i++) weighted.push(w);
+    });
+    // Shuffle
+    for (let i = weighted.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [weighted[i], weighted[j]] = [weighted[j], weighted[i]];
+    }
+    // Pick unique up to steps
+    const picked = [];
+    const seen = new Set();
+    for (const w of weighted) {
+        if (!seen.has(w)) {
+            picked.push(w);
+            seen.add(w);
+            if (picked.length >= level.steps) break;
+        }
+    }
+    // Top up if needed
+    while (picked.length < level.steps && picked.length < all.length) {
+        const w = all[Math.floor(Math.random()*all.length)];
+        if (!seen.has(w)) { picked.push(w); seen.add(w); }
+        else if (picked.length < level.steps) picked.push(w);
+    }
+    return picked.slice(0, level.steps);
+}
+
+function startLevel(idx) {
+    currentLevelIdx = idx;
+    const lvl = LEVELS[idx];
+    currentStep = 0;
+    typedSoFar = '';
+    score = 0;
+    streak = 0;
+    totalCorrectChars = 0;
+    totalKeystrokes = 0;
+    levelMistakes = 0;
+    levelStartTime = Date.now();
+    roundWords = pickWords(lvl);
+
+    document.getElementById('levelSelect').classList.add('hidden');
+    document.getElementById('gameContainer').classList.remove('hidden');
+    document.getElementById('celebration').classList.remove('active');
+
+    document.getElementById('liIcon').textContent = lvl.icon;
+    document.getElementById('liName').textContent = `${lvl.n}. ${lvl.name}`;
+
+    const wpmPill = document.getElementById('wpmPill');
+    const accPill = document.getElementById('accPill');
+    if (lvl.showWPM) {
+        wpmPill.style.display = 'flex';
+        accPill.style.display = 'flex';
+    } else {
+        wpmPill.style.display = 'none';
+        accPill.style.display = 'none';
+    }
+
+    buildStaircase();
+    updateUI();
+    document.getElementById('wordInput').focus();
+}
+
+function buildStaircase() {
+    const c = document.getElementById('staircase');
+    c.innerHTML = '';
+    c.style.removeProperty('--step-w');
+    c.style.removeProperty('--rise');
+
+    const total = roundWords.length;
+    if (total === 0) return;
+
+    const ch = c.offsetHeight || 280;
+    const isMobile = window.matchMedia('(max-width: 850px)').matches;
+    const charSize = isMobile ? 32 : 40;
+    const stepHeight = isMobile ? 32 : 38;
+    const groundOffset = 50; // distance from container bottom for character start
+
+    // Step width = enough to fit the longest word, with a sensible minimum.
+    // Same width for every step so the staircase looks uniform.
+    const lengths = roundWords.map(w => [...w].length);
+    const maxLen = Math.max(...lengths);
+    const isSentence = !!LEVELS[currentLevelIdx].isSentence;
+    const charPx = isSentence ? 9 : 12;
+    const stepW = Math.max(60, maxLen * charPx + 22);
+
+    // Vertical rise per step: leave room for the character on the top step + flag.
+    const vertAvail = ch - groundOffset - stepHeight - charSize - 12;
+    const vertRise = Math.max(8, vertAvail / Math.max(total - 1, 1));
+
+    c.style.setProperty('--step-w', stepW + 'px');
+    c.style.setProperty('--rise', vertRise + 'px');
+    c.classList.toggle('sentences', isSentence);
+
+    for (let i = 0; i < total; i++) {
+        const step = document.createElement('div');
+        step.className = 'step';
+        step.id = 'step-' + i;
+        step.style.setProperty('--idx', i);
+        step.innerHTML = `<div class="step-block"><span class="step-word">${roundWords[i]}</span></div>`;
+        c.appendChild(step);
+    }
+
+    // Character (absolute, positioned after layout)
+    const char = document.createElement('div');
+    char.className = 'character';
+    char.id = 'character';
+    char.innerHTML = `<div class="character-body">${SKINS[currentSkin].char}</div>`;
+    c.appendChild(char);
+
+    // Finish flag (absolute, positioned after layout)
+    const flag = document.createElement('div');
+    flag.className = 'finish-flag';
+    flag.id = 'finish-flag';
+    flag.textContent = '🏁';
+    c.appendChild(flag);
+
+    c._layout = { total, stepW, vertRise, stepHeight, charSize, ch, groundOffset };
+
+    // Position character + flag once the flex layout has computed positions
+    requestAnimationFrame(() => {
+        positionCharOnGround();
+        positionFinishFlag();
+    });
+}
+
+// Position helpers query the actual DOM rects of the steps so they
+// work regardless of whether the staircase is centered or scrolled.
+function getStepContentBox(stepIdx) {
+    const c = document.getElementById('staircase');
+    const step = document.getElementById('step-' + stepIdx);
+    if (!c || !step) return null;
+    const cRect = c.getBoundingClientRect();
+    const sRect = step.getBoundingClientRect();
+    return {
+        x: sRect.left - cRect.left + c.scrollLeft,
+        y: sRect.top  - cRect.top  + c.scrollTop,
+        w: sRect.width,
+        h: sRect.height
+    };
+}
+
+function positionCharOnGround() {
+    const c = document.getElementById('staircase');
+    const char = document.getElementById('character');
+    if (!c || !char || !c._layout) return;
+    const box = getStepContentBox(0);
+    if (!box) return;
+    const { charSize, ch, groundOffset } = c._layout;
+    char.style.left = (box.x + box.w / 2 - charSize / 2) + 'px';
+    char.style.top = (ch - groundOffset) + 'px';
+}
+
+function positionFinishFlag() {
+    const flag = document.getElementById('finish-flag');
+    if (!flag) return;
+    const box = getStepContentBox(roundWords.length - 1);
+    if (!box) return;
+    flag.style.left = (box.x + box.w / 2) + 'px';
+    flag.style.top = (box.y - 4) + 'px';
+}
+
+function moveCharacter(stepIdx) {
+    const c = document.getElementById('staircase');
+    const char = document.getElementById('character');
+    if (!c || !char || !c._layout) return;
+    const box = getStepContentBox(stepIdx);
+    if (!box) return;
+    const { charSize } = c._layout;
+
+    char.classList.add('jumping');
+    char.style.left = (box.x + box.w / 2 - charSize / 2) + 'px';
+    char.style.top  = (box.y - charSize - 4) + 'px';
+    setTimeout(() => char.classList.remove('jumping'), 600);
+
+    // Auto-scroll horizontally on narrow screens so the active step stays in view
+    const stepCenter = box.x + box.w / 2;
+    const visStart = c.scrollLeft;
+    const visEnd = visStart + c.clientWidth;
+    const margin = 80;
+    if (stepCenter > visEnd - margin || stepCenter < visStart + margin) {
+        c.scrollTo({
+            left: Math.max(0, stepCenter - c.clientWidth / 2),
+            behavior: 'smooth'
+        });
+    }
+}
+
+function updateUI() {
+    const total = roundWords.length;
+    for (let i=0; i<total; i++) {
+        const s = document.getElementById('step-'+i);
+        if (!s) continue;
+        s.classList.remove('active','completed');
+        if (i < currentStep) s.classList.add('completed');
+        else if (i === currentStep) s.classList.add('active');
+    }
+    renderWordDisplay();
+    document.getElementById('progressBar').style.width = (currentStep/total*100) + '%';
+    document.getElementById('scoreVal').textContent = score;
+
+    // WPM + accuracy
+    const lvl = LEVELS[currentLevelIdx];
+    if (lvl.showWPM) {
+        const elapsedMin = (Date.now() - levelStartTime) / 60000;
+        const wpm = elapsedMin > 0.05 ? Math.round((totalCorrectChars / 5) / elapsedMin) : 0;
+        document.getElementById('wpmVal').textContent = wpm;
+        const acc = totalKeystrokes > 0
+            ? Math.max(0, Math.round((1 - levelMistakes / totalKeystrokes) * 100))
+            : 100;
+        document.getElementById('accVal').textContent = acc + '%';
+    }
+
+    // Streak
+    const sd = document.getElementById('streakDisplay');
+    if (streak >= 3) {
+        sd.classList.add('visible');
+        document.getElementById('streakCount').textContent = streak;
+    } else {
+        sd.classList.remove('visible');
+    }
+
+    // AltGr tip
+    const status = document.getElementById('inputStatus');
+    if (lvl.altGrTip && currentStep < total) {
+        const word = roundWords[currentStep];
+        const nextChar = word[typedSoFar.length];
+        if (nextChar && LV_BASE[nextChar]) {
+            status.textContent = `Pieturi AltGr + ${LV_BASE[nextChar].toUpperCase()} = ${nextChar.toUpperCase()}`;
+            status.className = 'input-status altgr';
+        } else if (status.classList.contains('altgr')) {
+            status.textContent = '';
+            status.className = 'input-status';
+        }
+    }
+
+    highlightNextKey();
+}
+
+function renderWordDisplay() {
+    const wd = document.getElementById('wordDisplay');
+    wd.innerHTML = '';
+    if (currentStep >= roundWords.length) return;
+    const word = roundWords[currentStep];
+    [...word].forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.className = 'wd-char';
+        if (i < typedSoFar.length) span.classList.add('done');
+        else if (i === typedSoFar.length) span.classList.add('current');
+        span.textContent = ch === ' ' ? '␣' : ch.toUpperCase();
+        wd.appendChild(span);
+    });
+}
+
+// ============================================
+// INPUT HANDLING
+// ============================================
+function handleInput(typed) {
+    if (isAnimating || currentStep >= roundWords.length) return;
+    const target = roundWords[currentStep];
+    const t = typed.toLowerCase();
+
+    if (t === target) {
+        // word complete
+        typedSoFar = t;
+        renderWordDisplay();
+        handleCorrectWord();
+        return;
+    }
+
+    // Prefix matches?
+    if (target.startsWith(t)) {
+        // Track keystroke if longer than before
+        if (t.length > typedSoFar.length) {
+            totalKeystrokes++;
+            sndKey();
+            const ch = t[t.length-1];
+            flashKey(ch);
+        }
+        typedSoFar = t;
+        renderWordDisplay();
+        highlightNextKey();
+        const lvl = LEVELS[currentLevelIdx];
+        if (lvl.altGrTip) updateUI();
+    } else {
+        // wrong
+        handleWrongChar();
+    }
+}
+
+function handleCorrectWord() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const word = roundWords[currentStep];
+    totalCorrectChars += word.length;
+
+    sndCorrect();
+    streak++;
+    const points = streak >= 5 ? 15 : streak >= 3 ? 10 : 5;
+    score += points;
+
+    // Reduce difficulty for solved word
+    if (wordDifficulty[word]) wordDifficulty[word] = Math.max(0, wordDifficulty[word] - 1);
+
+    // Particles
+    const step = document.getElementById('step-' + currentStep);
+    if (step) {
+        const r = step.getBoundingClientRect();
+        const sr = document.getElementById('staircase').getBoundingClientRect();
+        spawnParticles(r.left - sr.left + r.width/2, r.top - sr.top + r.height/2);
+    }
+
+    moveCharacter(currentStep);
+    currentStep++;
+
+    setTimeout(() => {
+        isAnimating = false;
+        document.getElementById('wordInput').value = '';
+        typedSoFar = '';
+        if (currentStep >= roundWords.length) {
+            levelComplete();
+        } else {
+            updateUI();
+        }
+    }, 500);
+
+    updateUI();
+}
+
+function handleWrongChar() {
+    sndWrong();
+    levelMistakes++;
+    totalKeystrokes++;
+    streak = 0;
+
+    // Bump difficulty for this word
+    const word = roundWords[currentStep];
+    wordDifficulty[word] = (wordDifficulty[word] || 0) + 1;
+
+    const status = document.getElementById('inputStatus');
+    status.textContent = '✗ Mēģini vēlreiz';
+    status.className = 'input-status wrong';
+
+    const wd = document.getElementById('wordDisplay');
+    wd.style.animation = 'shake 0.4s ease';
+    setTimeout(() => {
+        wd.style.animation = '';
+        status.textContent = '';
+        status.className = 'input-status';
+        document.getElementById('wordInput').value = '';
+        typedSoFar = '';
+        renderWordDisplay();
+        updateUI();
+    }, 400);
+}
+
+// ============================================
+// EFFECTS
+// ============================================
+function spawnParticles(x, y) {
+    const colors = ['#f093fb','#f5576c','#fda085','#38ef7d','#667eea','#fdd835'];
+    const c = document.getElementById('staircase');
+    for (let i=0; i<10; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const sz = Math.random()*7 + 4;
+        p.style.width = sz+'px'; p.style.height = sz+'px';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.left = x+'px'; p.style.top = y+'px';
+        const a = Math.random()*Math.PI*2;
+        const d = Math.random()*60 + 30;
+        p.style.setProperty('--tx', Math.cos(a)*d+'px');
+        p.style.setProperty('--ty', Math.sin(a)*d+'px');
+        c.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+    }
+}
+
+function spawnConfetti() {
+    const colors = ['#f093fb','#f5576c','#fda085','#38ef7d','#667eea','#fdd835','#48dbfb','#ff6b6b'];
+    for (let i=0; i<60; i++) {
+        setTimeout(() => {
+            const c = document.createElement('div');
+            c.className = 'confetti';
+            const sz = Math.random()*10 + 5;
+            c.style.width = sz+'px';
+            c.style.height = sz*(Math.random()*0.5+0.5)+'px';
+            c.style.background = colors[Math.floor(Math.random()*colors.length)];
+            c.style.left = Math.random()*100 + 'vw';
+            c.style.setProperty('--fall-duration', (Math.random()*2 + 2)+'s');
+            c.style.setProperty('--rotation', (Math.random()*720 + 360)+'deg');
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 4000);
+        }, i*40);
+    }
+}
+
+// ============================================
+// LEVEL COMPLETE
+// ============================================
+function levelComplete() {
+    sndComplete();
+    spawnConfetti();
+
+    const lvl = LEVELS[currentLevelIdx];
+    const elapsedMin = (Date.now() - levelStartTime) / 60000;
+    const wpm = elapsedMin > 0.05 ? Math.round((totalCorrectChars / 5) / elapsedMin) : 0;
+    const acc = totalKeystrokes > 0
+        ? Math.max(0, Math.round((1 - levelMistakes / totalKeystrokes) * 100))
+        : 100;
+
+    // Save best
+    const prevBest = bestScores[lvl.n];
+    if (!prevBest || score > prevBest.score || (score === prevBest.score && wpm > prevBest.wpm)) {
+        bestScores[lvl.n] = { score, wpm, acc };
+        localStorage.setItem('burtuTrepe_best', JSON.stringify(bestScores));
+    }
+
+    // Unlock next
+    if (currentLevelIdx + 1 < LEVELS.length) {
+        const nextN = LEVELS[currentLevelIdx + 1].n;
+        if (!unlocked.includes(nextN)) {
+            unlocked.push(nextN);
+            localStorage.setItem('burtuTrepe_unlocked', JSON.stringify(unlocked));
+        }
+    }
+    localStorage.setItem('burtuTrepe_diff', JSON.stringify(wordDifficulty));
+
+    const messages = [
+        { e: '🎉', t: 'Lieliski!' },
+        { e: '🌟', t: 'Bravo!' },
+        { e: '🏆', t: 'Super!' },
+        { e: '✨', t: 'Fantastiski!' },
+        { e: '🚀', t: 'Tu lido!' },
+        { e: '⚡', t: 'Tu esi ātrs!' }
+    ];
+    const m = messages[Math.floor(Math.random()*messages.length)];
+
+    document.getElementById('celebEmoji').textContent = m.e;
+    document.getElementById('celebTitle').textContent = m.t;
+    document.getElementById('celebMsg').textContent = `${lvl.n}. līmenis pabeigts — "${lvl.name}"`;
+    document.getElementById('csScore').textContent = score;
+    document.getElementById('csWpm').textContent = wpm;
+    document.getElementById('csAcc').textContent = acc + '%';
+
+    // Reset focus to replay
+    celebFocusedBtn = 'replay';
+    updateCelebFocus();
+
+    // Hide next button on last level
+    const nextBtn = document.querySelector('[data-action="next"]');
+    if (currentLevelIdx >= LEVELS.length - 1) {
+        nextBtn.style.display = 'none';
+    } else {
+        nextBtn.style.display = 'flex';
+    }
+
+    setTimeout(() => {
+        document.getElementById('celebration').classList.add('active');
+    }, 600);
+}
+
+// ============================================
+// CELEBRATION KEYBOARD NAV
+// ============================================
+function updateCelebFocus() {
+    document.querySelectorAll('.celeb-btn').forEach(b => {
+        b.classList.toggle('focused', b.dataset.action === celebFocusedBtn);
+    });
+}
+
+function celebAction(action) {
+    if (action === 'replay') {
+        startLevel(currentLevelIdx);
+    } else if (action === 'next') {
+        if (currentLevelIdx + 1 < LEVELS.length) startLevel(currentLevelIdx + 1);
+        else startLevel(currentLevelIdx); // wrap
+    } else if (action === 'menu') {
+        backToMenu();
+    }
+}
+
+document.querySelectorAll('.celeb-btn').forEach(b => {
+    b.onclick = () => celebAction(b.dataset.action);
+    b.onmouseenter = () => {
+        celebFocusedBtn = b.dataset.action;
+        updateCelebFocus();
+    };
+});
+
+// ============================================
+// NAV
+// ============================================
+function backToMenu() {
+    document.getElementById('gameContainer').classList.add('hidden');
+    document.getElementById('celebration').classList.remove('active');
+    document.getElementById('levelSelect').classList.remove('hidden');
+    buildLevelSelect();
+}
+
+// ============================================
+// EVENT WIRING
+// ============================================
+const wordInput = document.getElementById('wordInput');
+
+wordInput.addEventListener('input', (e) => {
+    handleInput(e.target.value);
+});
+
+// Key events
+document.addEventListener('keydown', (e) => {
+    const celebActive = document.getElementById('celebration').classList.contains('active');
+    const gameActive = !document.getElementById('gameContainer').classList.contains('hidden');
+    const menuActive = !document.getElementById('levelSelect').classList.contains('hidden');
+
+    if (celebActive) {
+        e.preventDefault();
+        const order = ['menu','replay','next'];
+        const visibleOrder = order.filter(a => {
+            const btn = document.querySelector(`[data-action="${a}"]`);
+            return btn && btn.style.display !== 'none';
+        });
+        const idx = visibleOrder.indexOf(celebFocusedBtn);
+        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+            celebFocusedBtn = visibleOrder[Math.max(0, idx - 1)];
+            updateCelebFocus();
+        } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+            celebFocusedBtn = visibleOrder[Math.min(visibleOrder.length-1, idx + 1)];
+            updateCelebFocus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            celebAction(celebFocusedBtn);
+        } else if (e.key === 'Escape') {
+            backToMenu();
+        }
+        return;
+    }
+
+    if (gameActive) {
+        if (e.key === 'Escape') {
+            backToMenu();
+            return;
+        }
+        // Refocus input if user clicks away
+        if (document.activeElement !== wordInput && /^[a-zA-Zāēīūčšžļķņģ]$/.test(e.key)) {
+            wordInput.focus();
+        }
+    }
+
+    if (menuActive) {
+        if (/^[1-9]$/.test(e.key)) {
+            const n = parseInt(e.key);
+            const lvl = LEVELS.find(l => l.n === n);
+            if (lvl && unlocked.includes(n)) startLevel(LEVELS.indexOf(lvl));
+        }
+    }
+});
+
+// Stars background
+function createStars() {
+    const c = document.getElementById('stars');
+    for (let i=0; i<70; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const sz = Math.random()*2.5 + 1;
+        s.style.width = sz+'px'; s.style.height = sz+'px';
+        s.style.left = Math.random()*100 + '%';
+        s.style.top = Math.random()*60 + '%';
+        s.style.setProperty('--duration', (Math.random()*3 + 2)+'s');
+        s.style.animationDelay = Math.random()*5 + 's';
+        c.appendChild(s);
+    }
+}
+
+// Resize
+window.addEventListener('resize', () => {
+    if (!document.getElementById('gameContainer').classList.contains('hidden')) {
+        buildStaircase();
+        if (currentStep > 0) {
+            const char = document.getElementById('character');
+            if (char) {
+                char.style.transition = 'none';
+                moveCharacter(currentStep - 1);
+                setTimeout(() => char.style.transition = '', 50);
+            }
+        }
+        updateUI();
+    }
+});
+
+// Init
+createStars();
+buildKeyboard();
+buildLevelSelect();
+applySkin(currentSkin);
+</script>
+</body>
+</html>
