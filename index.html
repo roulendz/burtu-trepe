@@ -587,12 +587,14 @@
             max-width: 1100px;
             flex: 1;
             min-height: 200px;
-            max-height: 420px;
+            max-height: 56vh;
             overflow: hidden;
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding: 0 16px 8px;
+            /* Bottom padding reserves ground space below step 0 for the
+               character to stand on before climbing onto the first step. */
+            padding: 0 16px var(--ground-offset, 50px);
             box-sizing: border-box;
         }
 
@@ -612,7 +614,10 @@
 
         .step-block {
             width: 100%;
-            padding: 0 12px;
+            /* Left padding reserves a "landing pad" so the character can stand
+               on the step without covering the word. JS sets --step-pad-left
+               based on the current character size. */
+            padding: 0 12px 0 var(--step-pad-left, 48px);
             height: 100%;
             background: linear-gradient(135deg, #2d1b69, #1a3854);
             border-radius: 10px;
@@ -1780,9 +1785,16 @@ function flashKey(char) {
 // GAME
 // ============================================
 function pickWords(level) {
-    // Drill levels keep their generated progression order — no shuffling.
+    // Drill levels: shuffle so the kid actually reacts to each prompt instead
+    // of memorizing the order. Skip adaptive difficulty here — drill items
+    // are letter sequences, not real words.
     if (level.drill) {
-        return level.words.slice(0, level.steps);
+        const shuffled = [...level.words];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled.slice(0, level.steps);
     }
 
     const all = [...level.words];
@@ -1852,6 +1864,24 @@ function startLevel(idx) {
     document.getElementById('wordInput').focus();
 }
 
+// Measure the rendered pixel width of a word at the actual font/letter-spacing
+// the staircase will use. More accurate than character-count estimates because
+// it accounts for uppercase, font kerning, letter-spacing, and Latvian glyphs.
+function measureWordWidth(word, fontRem, letterSpacingPx) {
+    const probe = document.createElement('span');
+    probe.style.cssText =
+        'position:absolute;visibility:hidden;left:-9999px;top:0;' +
+        "font-family:'Nunito',sans-serif;font-weight:800;text-transform:uppercase;" +
+        'white-space:nowrap;' +
+        'font-size:' + fontRem + 'rem;' +
+        'letter-spacing:' + letterSpacingPx + 'px;';
+    probe.textContent = word;
+    document.body.appendChild(probe);
+    const w = probe.getBoundingClientRect().width;
+    document.body.removeChild(probe);
+    return w;
+}
+
 function buildStaircase() {
     const c = document.getElementById('staircase');
     c.innerHTML = '';
@@ -1869,18 +1899,33 @@ function buildStaircase() {
     const stepHeight = isSentence
         ? (isMobile ? 26 : 32)
         : (isMobile ? 30 : 38);
-    const groundOffset = 50;
+    // Ground space below step 0 — must be larger than charSize so the
+    // character standing on the ground is fully visible below step 0.
+    const groundOffset = charSize + 14;
     const sidePadding = 16;
 
-    const lengths = roundWords.map(w => [...w].length);
-    const maxLen = Math.max(...lengths);
-    const charPx = isSentence ? 9 : 12;
-    const idealStepW = maxLen * charPx + 28;
+    // Each step reserves a landing pad on the left for the character to stand
+    // on without covering the word. Right side keeps a small visual margin.
+    const padLeft = charSize + 10;
+    const padRight = 12;
+    const padTotal = padLeft + padRight;
+
+    // Measure the widest word at its actual rendered size so stepW is correct.
+    // This must match the CSS font-size/letter-spacing used by .step-word.
+    const fontRem = isSentence ? 0.85 : 1.05;
+    const letterSpacingPx = isSentence ? 1.5 : 2;
+    let maxWordPx = 0;
+    for (const w of roundWords) {
+        const px = measureWordWidth(w, fontRem, letterSpacingPx);
+        if (px > maxWordPx) maxWordPx = px;
+    }
+    // Small safety buffer in case rendering rounds up
+    const idealStepW = Math.ceil(maxWordPx) + padTotal + 4;
     const availableW = Math.max(200, cw - sidePadding * 2);
 
-    // Step width: fit the word but never exceed the container width
+    // Step width: fit the word + landing pad, but never exceed the container
     let stepW = Math.min(idealStepW, availableW);
-    stepW = Math.max(56, stepW);
+    stepW = Math.max(padTotal + 30, stepW);
 
     // Stride = horizontal offset between consecutive steps. We want stairs
     // mostly stacked vertically (small stride) so the whole staircase fits
@@ -1895,13 +1940,18 @@ function buildStaircase() {
     const vertAvail = ch - groundOffset - stepHeight - charSize - 12;
     const vertRise = Math.max(8, vertAvail / Math.max(total - 1, 1));
 
-    // Font scale: shrink text proportionally if stepW had to shrink
-    const fontScale = Math.min(1, (stepW - 28) / Math.max(maxLen * charPx, 1));
+    // Font scale: shrink text proportionally if stepW had to shrink below
+    // the measured ideal — keeps long sentences readable on narrow screens.
+    const fontScale = maxWordPx > 0
+        ? Math.min(1, (stepW - padTotal) / maxWordPx)
+        : 1;
 
     c.style.setProperty('--step-w', stepW + 'px');
     c.style.setProperty('--stride', stride + 'px');
     c.style.setProperty('--rise', vertRise + 'px');
     c.style.setProperty('--step-h', stepHeight + 'px');
+    c.style.setProperty('--step-pad-left', padLeft + 'px');
+    c.style.setProperty('--ground-offset', groundOffset + 'px');
     c.style.setProperty('--font-scale', fontScale.toFixed(3));
     c.classList.toggle('sentences', isSentence);
 
@@ -1926,7 +1976,7 @@ function buildStaircase() {
     flag.textContent = '🏁';
     c.appendChild(flag);
 
-    c._layout = { total, stepW, stride, vertRise, stepHeight, charSize, ch, groundOffset };
+    c._layout = { total, stepW, stride, vertRise, stepHeight, charSize, ch, groundOffset, padLeft };
 
     requestAnimationFrame(() => {
         positionCharOnGround();
@@ -1950,15 +2000,23 @@ function getStepContentBox(stepIdx) {
     };
 }
 
+// Character lands on the LEFT landing pad of the step (not the center) so it
+// never covers the word. padLeft is the size of that landing pad in pixels.
+function charXForStep(box, padLeft, charSize) {
+    return box.x + (padLeft - charSize) / 2 + 4;
+}
+
 function positionCharOnGround() {
     const c = document.getElementById('staircase');
     const char = document.getElementById('character');
     if (!c || !char || !c._layout) return;
     const box = getStepContentBox(0);
     if (!box) return;
-    const { charSize, ch, groundOffset } = c._layout;
-    char.style.left = (box.x + box.w / 2 - charSize / 2) + 'px';
-    char.style.top = (ch - groundOffset) + 'px';
+    const { charSize, ch, padLeft } = c._layout;
+    char.style.left = charXForStep(box, padLeft, charSize) + 'px';
+    // Character bottom sits 4px above container bottom — places the whole
+    // character visibly BELOW step 0 (which has groundOffset of breathing room).
+    char.style.top = (ch - charSize - 4) + 'px';
 }
 
 function positionFinishFlag() {
@@ -1966,7 +2024,10 @@ function positionFinishFlag() {
     if (!flag) return;
     const box = getStepContentBox(roundWords.length - 1);
     if (!box) return;
-    flag.style.left = (box.x + box.w / 2) + 'px';
+    // Flag sits above the right portion of the last step (over the word area)
+    const c = document.getElementById('staircase');
+    const padLeft = (c && c._layout) ? c._layout.padLeft : 48;
+    flag.style.left = (box.x + padLeft + (box.w - padLeft) / 2) + 'px';
     flag.style.top = (box.y - 4) + 'px';
 }
 
@@ -1976,10 +2037,10 @@ function moveCharacter(stepIdx) {
     if (!c || !char || !c._layout) return;
     const box = getStepContentBox(stepIdx);
     if (!box) return;
-    const { charSize } = c._layout;
+    const { charSize, padLeft } = c._layout;
 
     char.classList.add('jumping');
-    char.style.left = (box.x + box.w / 2 - charSize / 2) + 'px';
+    char.style.left = charXForStep(box, padLeft, charSize) + 'px';
     char.style.top  = (box.y - charSize - 4) + 'px';
     setTimeout(() => char.classList.remove('jumping'), 600);
 }
