@@ -1,133 +1,105 @@
-// Module entrypoint — wires the game's level-complete event into the
-// leaderboard flow. Submits to Google Forms, fetches latest entries,
-// renders the cards UI, and emits continue events back to the game.
-
 import { submitScore, fetchLeaderboardCsv, invalidateCache } from './leaderboard-api.js';
 import { parseCsv, projectedRank } from './leaderboard-data.js';
-import { LeaderboardView, promptName } from './leaderboard-ui.js';
+import { LeaderboardView } from './leaderboard-ui.js';
 
-const NAME_KEY = 'burtuTrepe_lastName';
+const NAME_KEY     = 'burtuTrepe_lastName';
+const AUTOSAVE_KEY = 'burtuTrepe_autoSave';
 
-/**
- * Read/write the last submitted name so we can pre-fill the input.
- */
-function rememberName(name) {
-    try { localStorage.setItem(NAME_KEY, name); } catch { /* ignore */ }
-}
-function recallName() {
-    try { return localStorage.getItem(NAME_KEY) || ''; } catch { return ''; }
-}
+function rememberName(name)    { try { localStorage.setItem(NAME_KEY, name); } catch {} }
+function recallName()          { try { return localStorage.getItem(NAME_KEY) || ''; } catch { return ''; } }
+function rememberAutoSave(on)  { try { localStorage.setItem(AUTOSAVE_KEY, on ? '1' : '0'); } catch {} }
+function recallAutoSave()      { try { return localStorage.getItem(AUTOSAVE_KEY) !== '0'; } catch { return true; } }
 
-/**
- * Listen for the game's level-complete event. Detail shape:
- *   { level: number, score: number, wpm: number, accuracy: number, skin: string }
- */
 document.addEventListener('game:level-complete', async (e) => {
-    const stats = e.detail;
-    showLeaderboardFlow(stats).catch(err => {
+    showLeaderboardFlow(e.detail).catch(err => {
         console.error('Leaderboard flow failed:', err);
-        // Fall back: just emit continue so the game isn't stuck
         document.dispatchEvent(new CustomEvent('leaderboard:done', { detail: { skipped: true } }));
     });
 });
 
 async function showLeaderboardFlow(stats) {
-    const overlay = ensureOverlay();
-    const view = overlay._view;
-    const statsEl = overlay.querySelector('[data-role="stats"]');
-    const submitBtn = overlay.querySelector('[data-action="submit"]');
-    const replayBtn = overlay.querySelector('[data-action="replay"]');
-    const nextBtn   = overlay.querySelector('[data-action="next"]');
-    const menuBtn   = overlay.querySelector('[data-action="menu"]');
+    const overlay     = ensureOverlay();
+    const view        = overlay._view;
+    const projEl      = overlay.querySelector('[data-role="projection"]');
+    const saveSection = overlay.querySelector('[data-role="save-section"]');
+    const nameInput   = overlay.querySelector('[data-role="name-input"]');
+    const submitBtn   = overlay.querySelector('[data-action="submit"]');
+    const autoCheck   = overlay.querySelector('[data-role="autosave"]');
+    const savedMsg    = overlay.querySelector('[data-role="saved-msg"]');
 
-    // Reset state
-    statsEl.innerHTML = `
+    overlay.querySelector('.lb-overlay-title').textContent = `${stats.level}. līmenis pabeigts!`;
+    overlay.querySelector('[data-role="stats"]').innerHTML = `
         <div class="lb-mystat lb-mystat--score"><span>⭐</span><strong>${stats.score}</strong><small>Punkti</small></div>
         <div class="lb-mystat lb-mystat--wpm"><span>⚡</span><strong>${stats.wpm}</strong><small>Vārdi/min</small></div>
         <div class="lb-mystat lb-mystat--acc"><span>✓</span><strong>${stats.accuracy}%</strong><small>Akurāti</small></div>
     `;
-    overlay.querySelector('.lb-overlay-title').textContent = `${stats.level}. līmenis pabeigts!`;
     overlay.classList.add('open');
-    submitBtn.classList.remove('hidden');
-    submitBtn.disabled = false;
-    submitBtn.textContent = '💾 Saglabāt rezultātu';
 
-    // Update view's level so it filters correctly
+    // Reset save section
+    saveSection.classList.remove('lb-save-section--saved');
+    nameInput.value = recallName();
+    autoCheck.checked = recallAutoSave();
+    submitBtn.disabled = !nameInput.value.trim();
+    savedMsg.textContent = '';
+
+    // Fetch leaderboard
     view.setLevel(stats.level);
-
-    // Initial fetch + render with current data
     let entries = [];
     try {
-        const csv = await fetchLeaderboardCsv();
-        entries = parseCsv(csv);
+        entries = parseCsv(await fetchLeaderboardCsv());
     } catch (err) {
         console.warn('Could not fetch leaderboard:', err);
     }
-
     view.setEntries(entries);
     view.setUserEntry(null);
 
-    // Show projected rank in the header
     const projection = projectedRank(entries, stats, view.sortBy);
-    const projEl = overlay.querySelector('[data-role="projection"]');
     projEl.innerHTML = projection.rank
         ? `Tu būsi <strong>#${projection.rank}</strong> vietā`
         : 'Sāc vēsturi šajā līmenī!';
 
-    // Set up button handlers (replace each render to avoid stale closures)
-    submitBtn.onclick = async () => {
+    // Single save routine used by both manual click and auto-save
+    const save = async () => {
+        const name = nameInput.value.trim();
+        if (!name) return;
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Saglabā…';
-
-        const result = await promptName({
-            defaultName: recallName(),
-            projectedRankInfo: projection,
-        });
-        if (!result) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = '💾 Saglabāt rezultātu';
-            return;
-        }
 
         const userEntry = {
-            name: result.name,
-            level: stats.level,
-            score: stats.score,
-            wpm: stats.wpm,
-            accuracy: stats.accuracy,
-            skin: stats.skin,
+            name, level: stats.level, score: stats.score,
+            wpm: stats.wpm, accuracy: stats.accuracy, skin: stats.skin,
         };
-        rememberName(result.name);
-
-        // Optimistic insert — show user in leaderboard immediately
+        rememberName(name);
         view.setUserEntry(userEntry);
-        submitBtn.classList.add('hidden');
-        projEl.innerHTML = '🎉 Tavs rezultāts saglabāts!';
 
-        // Fire-and-forget submit, then refetch in background
-        const sendResult = await submitScore(userEntry);
-        if (!sendResult.ok) {
-            projEl.innerHTML = '⚠️ Saglabāšana neizdevās. Mēģini vēlāk.';
-        }
+        saveSection.classList.add('lb-save-section--saved');
+        savedMsg.textContent = '🎉 Rezultāts saglabāts!';
+
+        const result = await submitScore(userEntry);
+        if (!result.ok) savedMsg.textContent = '⚠️ Saglabāšana neizdevās';
+        submitBtn.title = 'Rezultāts jau saglabāts';
         invalidateCache();
-        // Sheets has a small lag — try a fresh fetch ~3s later
         setTimeout(async () => {
             try {
-                const fresh = await fetchLeaderboardCsv({ force: true });
-                view.setEntries(parseCsv(fresh));
-            } catch { /* keep optimistic data */ }
+                view.setEntries(parseCsv(await fetchLeaderboardCsv({ force: true })));
+            } catch {}
         }, 3000);
     };
 
-    replayBtn.onclick = () => closeOverlay(() =>
-        document.dispatchEvent(new CustomEvent('leaderboard:replay'))
-    );
-    nextBtn.onclick = () => closeOverlay(() =>
-        document.dispatchEvent(new CustomEvent('leaderboard:next'))
-    );
-    menuBtn.onclick = () => closeOverlay(() =>
-        document.dispatchEvent(new CustomEvent('leaderboard:menu'))
-    );
+    nameInput.oninput = () => {
+        submitBtn.disabled = !nameInput.value.trim();
+        submitBtn.title = '';
+        saveSection.classList.remove('lb-save-section--saved');
+    };
+    nameInput.onkeydown = (e) => { if (e.key === 'Enter' && !submitBtn.disabled) save(); };
+    submitBtn.onclick = save;
+    autoCheck.onchange = () => rememberAutoSave(autoCheck.checked);
+
+    if (autoCheck.checked && nameInput.value.trim()) save();
+
+    const nav = (evt) => () => closeOverlay(() => document.dispatchEvent(new CustomEvent(evt)));
+    overlay.querySelector('[data-action="replay"]').onclick = nav('leaderboard:replay');
+    overlay.querySelector('[data-action="next"]').onclick   = nav('leaderboard:next');
+    overlay.querySelector('[data-action="menu"]').onclick   = nav('leaderboard:menu');
 }
 
 function closeOverlay(after) {
@@ -137,7 +109,6 @@ function closeOverlay(after) {
     setTimeout(after, 250);
 }
 
-/** Build the overlay DOM once and reuse it. */
 function ensureOverlay() {
     let overlay = document.getElementById('lbOverlay');
     if (overlay) return overlay;
@@ -152,8 +123,19 @@ function ensureOverlay() {
                 <div class="lb-overlay-projection" data-role="projection"></div>
             </div>
             <div class="lb-overlay-stats" data-role="stats"></div>
-            <div class="lb-overlay-actions-top">
-                <button type="button" class="lb-btn lb-btn--primary" data-action="submit">💾 Saglabāt rezultātu</button>
+            <div class="lb-save-section" data-role="save-section">
+                <div class="lb-save-row">
+                    <input type="text" class="lb-save-name" data-role="name-input"
+                           maxlength="20" autocomplete="off" spellcheck="false"
+                           placeholder="Tavs vārds" />
+                    <button type="button" class="lb-btn lb-btn--primary lb-save-btn"
+                            data-action="submit" disabled>Saglabāt</button>
+                </div>
+                <label class="lb-autosave">
+                    <input type="checkbox" data-role="autosave" checked />
+                    <span>Automātiski saglabāt pēc līmeņa</span>
+                </label>
+                <div class="lb-saved-msg" data-role="saved-msg"></div>
             </div>
             <div class="lb-overlay-board" data-role="board"></div>
             <div class="lb-overlay-actions">
@@ -170,18 +152,5 @@ function ensureOverlay() {
         { entries: [], level: 1, initialSort: 'score' }
     );
 
-    // Re-fetch projected rank when sort changes (it can affect rank position)
-    overlay._view.addEventListener('sortchange', () => {
-        // No-op for now — projection text isn't critical to update on sort.
-    });
-
     return overlay;
-}
-
-// Expose a programmatic hook for the game to set the level on the view.
-// Done via the level-complete event detail, but kept here for clarity.
-function setLevel(level) {
-    const overlay = document.getElementById('lbOverlay');
-    if (!overlay || !overlay._view) return;
-    overlay._view.constructor.prototype; // no-op
 }

@@ -1,7 +1,7 @@
 // UI module — renders leaderboard cards, sort toggle, name input modal.
 // Speaks to the data module for ranking and the api module for submissions.
 
-import { SORTERS, rankForLevel, findRank, viewWindow, withOptimistic, projectedRank } from './leaderboard-data.js';
+import { SORTERS, rankForLevel, viewWindow, withOptimistic } from './leaderboard-data.js';
 
 const SKIN_EMOJI = Object.freeze({
     default:   '🧒',
@@ -235,77 +235,3 @@ function pluralize(n, one, few, many) {
     return many;
 }
 
-/**
- * Modal dialog asking the player to enter their name. Resolves with
- * `{ name }` on submit or `null` if the player skips/cancels.
- */
-export function promptName({ defaultName = '', projectedRankInfo = null } = {}) {
-    return new Promise(resolve => {
-        const overlay = document.createElement('div');
-        overlay.className = 'lb-prompt';
-        overlay.setAttribute('role', 'dialog');
-        overlay.setAttribute('aria-modal', 'true');
-
-        const projection = projectedRankInfo
-            ? `<div class="lb-prompt-rank">
-                   Tu būsi
-                   <strong>#${projectedRankInfo.rank}</strong>
-                   ${projectedRankInfo.total > 0 ? `no ${projectedRankInfo.total + 1}` : ''}
-               </div>`
-            : '';
-
-        overlay.innerHTML = `
-            <div class="lb-prompt-card" role="document">
-                <div class="lb-prompt-emoji" aria-hidden="true">🏆</div>
-                <h3 class="lb-prompt-title">Lielisks rezultāts!</h3>
-                ${projection}
-                <label class="lb-prompt-label" for="lb-name-input">Tavs vārds</label>
-                <input id="lb-name-input" class="lb-prompt-input" type="text"
-                       maxlength="20" autocomplete="off" spellcheck="false"
-                       placeholder="Piem. Anna" value="${esc(defaultName)}" />
-                <div class="lb-prompt-actions">
-                    <button type="button" class="lb-btn lb-btn--ghost" data-action="skip">Izlaist</button>
-                    <button type="button" class="lb-btn lb-btn--primary" data-action="submit" disabled>
-                        💾 Saglabāt
-                    </button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-
-        const input  = overlay.querySelector('.lb-prompt-input');
-        const submit = overlay.querySelector('[data-action="submit"]');
-        const skip   = overlay.querySelector('[data-action="skip"]');
-
-        const validate = () => {
-            const v = input.value.trim();
-            submit.disabled = v.length === 0 || v.length > 20;
-        };
-        validate();
-        input.addEventListener('input', validate);
-
-        const close = (result) => {
-            overlay.classList.add('closing');
-            setTimeout(() => {
-                overlay.remove();
-                resolve(result);
-            }, 200);
-        };
-
-        submit.addEventListener('click', () => {
-            if (submit.disabled) return;
-            close({ name: input.value.trim() });
-        });
-        skip.addEventListener('click', () => close(null));
-        input.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && !submit.disabled) submit.click();
-            if (e.key === 'Escape') skip.click();
-        });
-
-        // Defer focus to avoid layout-jank on initial paint
-        requestAnimationFrame(() => {
-            input.focus();
-            input.select();
-        });
-    });
-}
