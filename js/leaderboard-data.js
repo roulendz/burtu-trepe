@@ -95,6 +95,17 @@ export function rankForLevel(entries, level, sortBy = 'score') {
     return ranked.map((e, i) => ({ ...e, rank: i + 1 }));
 }
 
+export function rankAll(entries, sortBy = 'score') {
+    const valid = entries.filter(e => e && typeof e.name === 'string' && e.name.length > 0);
+    const s = SORTERS[sortBy] || SORTERS.score;
+    const sorted = [...valid].sort((a, b) =>
+        b[s.primary] - a[s.primary] ||
+        b[s.secondary] - a[s.secondary] ||
+        a.name.localeCompare(b.name, 'lv')
+    );
+    return sorted.map((e, i) => ({ ...e, rank: i + 1 }));
+}
+
 /**
  * Find a target entry's position in a ranked list. Match is fuzzy: same
  * name (case-insensitive) and exact level — ignores score/wpm so we still

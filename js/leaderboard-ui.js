@@ -30,7 +30,7 @@ function esc(s) {
  * @param {boolean} [opts.isPending] show "🆕" tag for unconfirmed submissions
  */
 export function renderCard(entry, opts = {}) {
-    const { isUser = false, isPending = false } = opts;
+    const { isUser = false, isPending = false, showLevel = false } = opts;
     const card = document.createElement('div');
     card.className = 'lb-card';
     if (isUser) card.classList.add('lb-card--user');
@@ -48,6 +48,7 @@ export function renderCard(entry, opts = {}) {
         <div class="lb-avatar" aria-hidden="true">${skin}</div>
         <div class="lb-name-wrap">
             <div class="lb-name">${esc(entry.name)}</div>
+            ${showLevel ? `<div class="lb-level-tag">${entry.level}. līmenis</div>` : ''}
             ${isPending ? '<div class="lb-pending">🆕 tikko</div>' : ''}
         </div>
         <div class="lb-stats">

@@ -358,6 +358,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.lb-level-tag {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 700;
+    margin-top: 1px;
+}
 .lb-pending {
     font-size: 0.7rem;
     color: var(--lb-gold);
