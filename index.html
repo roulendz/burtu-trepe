@@ -24,8 +24,8 @@
 
     <!-- ===== Open Graph (Facebook, WhatsApp, LinkedIn, Discord, Telegram) ===== -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Burtu Trepe — Mācies rakstīt latviski">
-    <meta property="og:description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, vairāki varoņi (Bērns, Spaidermens, Mavuika), leaderboard. Mobile-friendly.">
+    <meta property="og:title" id="ogTitle" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta property="og:description" id="ogDesc" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, vairāki varoņi (Bērns, Spaidermens, Mavuika), leaderboard. Mobile-friendly.">
     <meta property="og:image" content="https://roulendz.github.io/burtu-trepe/og-image.svg">
     <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
@@ -37,8 +37,8 @@
 
     <!-- ===== Twitter Card ===== -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Burtu Trepe — Mācies rakstīt latviski">
-    <meta name="twitter:description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, leaderboard, mobile-friendly.">
+    <meta name="twitter:title" id="twTitle" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta name="twitter:description" id="twDesc" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, leaderboard, mobile-friendly.">
     <meta name="twitter:image" content="https://roulendz.github.io/burtu-trepe/og-image.svg">
     <meta name="twitter:image:alt" content="Burtu Trepe — rakstīšanas spēle bērniem">
 
@@ -484,6 +484,51 @@
             width: 100%;
         }
 
+        .unlock-all-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            user-select: none;
+        }
+        .unlock-all-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f5576c;
+            cursor: pointer;
+        }
+
+        .ls-lb-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            align-self: center;
+            padding: 10px 24px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.8);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 6px;
+            min-height: 44px;
+        }
+        .ls-lb-btn:hover {
+            background: rgba(255,255,255,0.13);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
         .level-card {
             position: relative;
             padding: 18px 16px;
@@ -549,14 +594,49 @@
             color: var(--gold);
             font-weight: 700;
         }
+        .level-card .lc-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .level-card .lc-play {
+            flex: 1;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-red));
+            color: white;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.15s;
+            min-height: 32px;
+        }
+        .level-card .lc-play:hover { transform: scale(1.03); }
+        .level-card .lc-lb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            min-height: 32px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .level-card .lc-lb:hover { background: rgba(255,255,255,0.15); }
 
         /* ============ GAME ============ */
         .game-container {
             position: relative;
-            width: 100%; height: 100vh;
+            width: 100%; max-width: 100vw; height: 100vh;
             display: flex;
             flex-direction: column;
             z-index: 2;
+            overflow-x: hidden;
         }
         .game-container.hidden { display: none; }
 
@@ -564,17 +644,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 24px;
+            padding: 8px 10px;
             background: rgba(0,0,0,0.2);
             border-bottom: 1px solid rgba(255,255,255,0.06);
             backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .gh-left, .gh-right {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 6px;
         }
+        .gh-action-text { display: inline; }
 
         .menu-btn {
             background: rgba(255,255,255,0.08);
@@ -615,6 +698,27 @@
             border-radius: 10px;
             font-weight: 700;
             font-size: 0.85rem;
+        }
+        .gh-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.75);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .gh-action-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
         }
         .stat-pill .sp-label {
             color: rgba(255,255,255,0.5);
@@ -1192,6 +1296,13 @@
             .level-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 850px) {
+            .gh-action-text { display: none; }
+            .gh-action-btn { padding: 6px 8px; font-size: 0.85rem; }
+            .menu-btn { padding: 6px 10px; font-size: 0.8rem; }
+            .level-info { display: none; }
+            .stat-pill { padding: 4px 8px; font-size: 0.78rem; gap: 4px; }
+            .sp-label { display: none; }
+            .stat-pill.score .sp-label { display: inline; }
             .level-grid { grid-template-columns: repeat(2, 1fr); }
             .character-body { font-size: 32px; }
             .word-display { font-size: 1.6rem; }
@@ -1299,7 +1410,14 @@
                 </div>
             </div>
 
+            <a href="leaderboard.html" class="ls-lb-btn">🏆 Rezultātu tabula</a>
+
             <div class="level-grid" id="levelGrid"></div>
+
+            <label class="unlock-all-toggle" id="unlockAllToggle">
+                <input type="checkbox" id="unlockAllCheck" />
+                <span>Atbloķēt visus līmeņus</span>
+            </label>
         </div>
     </div>
 
@@ -1312,6 +1430,8 @@
                     <span class="li-icon" id="liIcon">🌱</span>
                     <span id="liName">1. līmenis</span>
                 </div>
+                <a class="gh-action-btn" id="ghLbLink" href="leaderboard.html?level=1" title="Rezultāti">🏆 <span class="gh-action-text">Rezultāti</span></a>
+                <button type="button" class="gh-action-btn" id="ghShareBtn" title="Dalīties">📤 <span class="gh-action-text">Dalīties</span></button>
             </div>
             <div class="gh-right">
                 <div class="stat-pill score">
@@ -1739,6 +1859,8 @@ let totalKeystrokes = 0;
 let levelMistakes = 0;
 let bestScores = JSON.parse(localStorage.getItem('burtuTrepe_best') || '{}');
 let unlocked = JSON.parse(localStorage.getItem('burtuTrepe_unlocked') || '[1]');
+const allUnlocked = localStorage.getItem('burtuTrepe_unlockAll') === '1';
+if (allUnlocked) unlocked = LEVELS.map(l => l.n);
 let wordDifficulty = JSON.parse(localStorage.getItem('burtuTrepe_diff') || '{}');
 let celebFocusedBtn = 'replay';
 
@@ -1791,9 +1913,15 @@ function buildLevelSelect() {
             <div class="lc-sub">${lvl.sub}</div>
             <div class="lc-keys">${lvl.keysShown}</div>
             ${best ? `<div class="lc-best">★ ${best.score} · ${best.wpm} WPM</div>` : ''}
+            ${isUnlocked ? `<div class="lc-actions">
+                <button type="button" class="lc-play" data-idx="${idx}">▶ Spēlēt</button>
+                <a href="leaderboard.html?level=${lvl.n}" class="lc-lb">🏆</a>
+            </div>` : ''}
         `;
         if (isUnlocked) {
             card.onclick = () => startLevel(idx);
+            card.querySelector('.lc-play').onclick = (e) => { e.stopPropagation(); startLevel(idx); };
+            card.querySelector('.lc-lb').onclick = (e) => e.stopPropagation();
         }
         grid.appendChild(card);
     });
@@ -1945,6 +2073,8 @@ function startLevel(idx) {
 
     document.getElementById('liIcon').textContent = lvl.icon;
     document.getElementById('liName').textContent = `${lvl.n}. ${lvl.name}`;
+    document.getElementById('ghLbLink').href = `leaderboard.html?level=${lvl.n}`;
+    updateLevelMeta(lvl);
 
     const wpmPill = document.getElementById('wpmPill');
     const accPill = document.getElementById('accPill');
@@ -2445,6 +2575,8 @@ function backToMenu() {
     document.getElementById('celebration').classList.remove('active');
     document.getElementById('levelSelect').classList.remove('hidden');
     buildLevelSelect();
+    history.replaceState(null, '', location.pathname);
+    document.title = 'Burtu Trepe — Mācies rakstīt latviski';
 }
 
 // ============================================
@@ -2564,11 +2696,64 @@ window.addEventListener('resize', () => {
     }
 });
 
+function updateLevelMeta(lvl) {
+    const title = `${lvl.n}. ${lvl.name} — Burtu Trepe`;
+    const desc = `Spēlē "${lvl.name}" līmeni Burtu Trepe — ${lvl.sub}. Bezmaksas rakstīšanas spēle bērniem latviešu valodā.`;
+    const url = `${location.origin}${location.pathname}?level=${lvl.n}`;
+    document.title = title;
+    history.replaceState(null, '', `?level=${lvl.n}`);
+    const setMeta = (id, v) => { const el = document.getElementById(id); if (el) el.setAttribute('content', v); };
+    setMeta('ogTitle', title);
+    setMeta('ogDesc', desc);
+    setMeta('twTitle', title);
+    setMeta('twDesc', desc);
+}
+
+function shareLevel() {
+    const lvl = LEVELS[currentLevelIdx];
+    const url = `${location.origin}${location.pathname}?level=${lvl.n}`;
+    const title = `${lvl.n}. ${lvl.name} — Burtu Trepe`;
+    const text = `Spēlē "${lvl.name}" — ${lvl.sub}`;
+    if (navigator.share) {
+        navigator.share({ title, text, url }).catch(() => {});
+        return;
+    }
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('ghShareBtn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span class="sp-label">✅</span>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+    }).catch(() => {});
+}
+
 // Init
 createStars();
 buildKeyboard();
 buildLevelSelect();
+
+const unlockAllCheck = document.getElementById('unlockAllCheck');
+unlockAllCheck.checked = allUnlocked;
+unlockAllCheck.onchange = () => {
+    if (unlockAllCheck.checked) {
+        unlocked = LEVELS.map(l => l.n);
+        localStorage.setItem('burtuTrepe_unlockAll', '1');
+    } else {
+        unlocked = JSON.parse(localStorage.getItem('burtuTrepe_unlocked') || '[1]');
+        localStorage.setItem('burtuTrepe_unlockAll', '0');
+    }
+    buildLevelSelect();
+};
+
 applySkin(currentSkin);
+
+document.getElementById('ghShareBtn').addEventListener('click', shareLevel);
+
+const urlLevel = new URLSearchParams(location.search).get('level');
+if (urlLevel) {
+    const n = Number(urlLevel);
+    const idx = LEVELS.findIndex(l => l.n === n);
+    if (idx !== -1 && unlocked.includes(n)) startLevel(idx);
+}
 </script>
 
 <!-- Leaderboard module — registers listener for game:level-complete -->
