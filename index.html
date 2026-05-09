@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Burtu Trepe — Mācies rakstīt latviski ar klaviatūru</title>
+    <title>Burtu Trepe - Mācies rakstīt latviski ar klaviatūru</title>
 
     <!-- ===== SEO ===== -->
     <meta name="description" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi no mājas rindas burtiem līdz pilniem teikumiem ar garumzīmēm un mīkstinājumiem. Mobilā un datorā, leaderboard, vairāki varoņi.">
@@ -24,23 +24,23 @@
 
     <!-- ===== Open Graph (Facebook, WhatsApp, LinkedIn, Discord, Telegram) ===== -->
     <meta property="og:type" content="website">
-    <meta property="og:title" id="ogTitle" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta property="og:title" id="ogTitle" content="Burtu Trepe - Mācies rakstīt latviski">
     <meta property="og:description" id="ogDesc" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, vairāki varoņi (Bērns, Spaidermens, Mavuika), leaderboard. Mobile-friendly.">
     <meta property="og:image" content="https://roulendz.github.io/burtu-trepe/og-image.svg">
     <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Burtu Trepe — rakstīšanas spēle bērniem ar klaviatūras emoji un kāpņu vizuālu">
+    <meta property="og:image:alt" content="Burtu Trepe - rakstīšanas spēle bērniem ar klaviatūras emoji un kāpņu vizuālu">
     <meta property="og:locale" content="lv_LV">
     <meta property="og:site_name" content="Burtu Trepe">
     <meta property="og:url" content="https://roulendz.github.io/burtu-trepe/">
 
     <!-- ===== Twitter Card ===== -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" id="twTitle" content="Burtu Trepe — Mācies rakstīt latviski">
+    <meta name="twitter:title" id="twTitle" content="Burtu Trepe - Mācies rakstīt latviski">
     <meta name="twitter:description" id="twDesc" content="Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi, leaderboard, mobile-friendly.">
     <meta name="twitter:image" content="https://roulendz.github.io/burtu-trepe/og-image.svg">
-    <meta name="twitter:image:alt" content="Burtu Trepe — rakstīšanas spēle bērniem">
+    <meta name="twitter:image:alt" content="Burtu Trepe - rakstīšanas spēle bērniem">
 
     <!-- ===== Canonical ===== -->
     <link rel="canonical" href="https://roulendz.github.io/burtu-trepe/">
@@ -51,7 +51,7 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Burtu Trepe",
-        "alternateName": "Burtu Trepe — Mācies rakstīt latviski",
+        "alternateName": "Burtu Trepe - Mācies rakstīt latviski",
         "description": "Bezmaksas rakstīšanas spēle bērniem latviešu valodā. 16 līmeņi no mājas rindas burtiem līdz pilniem teikumiem ar garumzīmēm un mīkstinājumiem.",
         "url": "https://roulendz.github.io/burtu-trepe/",
         "applicationCategory": "EducationalApplication",
@@ -335,7 +335,7 @@
         }
 
         /* ============ LEVEL SELECT ============ */
-        /* Outer: scroll container only — never a flex parent.
+        /* Outer: scroll container only - never a flex parent.
            Inner: flex parent with min-height so centering works on tall
            viewports but content overflows naturally on short ones. */
         .level-select {
@@ -756,7 +756,7 @@
 
         /* Staircase: flex layout with negative left margins so steps overlap
            horizontally (creating the "stacked" look). Vertical separation
-           comes from translateY(rise * idx). Always fits the container —
+           comes from translateY(rise * idx). Always fits the container -
            no horizontal scroll. JS computes stepW, stride, rise, font-scale. */
         .staircase {
             position: relative;
@@ -780,7 +780,7 @@
             flex: 0 0 var(--step-w, 80px);
             height: var(--step-h, 38px);
             /* Negative margin pulls each step left so it overlaps the previous
-               one horizontally — total flex span = stepW + (n-1)*stride. */
+               one horizontally - total flex span = stepW + (n-1)*stride. */
             margin-left: calc(var(--stride, 40px) - var(--step-w, 80px));
             transform: translateY(calc(-1 * var(--rise, 18px) * var(--idx, 0)));
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1383,7 +1383,7 @@
         <div class="ls-content">
             <div class="ls-header">
                 <h1>Burtu Trepe</h1>
-                <p>Mācies rakstīt latviski — solis pa solim</p>
+                <p>Mācies rakstīt latviski - solis pa solim</p>
             </div>
 
             <div class="char-select">
@@ -1516,7 +1516,7 @@
 // SKINS
 // ============================================
 const SKINS = {
-    default: { char: '🧒', name: 'Bērns' },
+    default: { char: '🧒', name: 'Vakars' },
     spiderman: { char: '🕷️', name: 'Spaidermens' },
     mavuika: { char: '🔥', name: 'Mavuika' }
 };
@@ -1594,7 +1594,7 @@ const KB_ROWS = [
 ];
 
 // ============================================
-// CURRICULUM DATA — single source of truth
+// CURRICULUM DATA - single source of truth
 // ============================================
 const KEY_ROWS = {
     home:   ['f','j','d','k','a','s','l','g','h'],
@@ -1619,31 +1619,59 @@ const ROW_SPECIALS = {
 
 const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ū']);
 
-// Latvian word bank — flat list, filtered at level-build time.
+// Latvian word bank - flat list, filtered at level-build time.
+// Letters used in each word determine which levels include it.
 // Letters used in each word determine which levels include it.
 const WORD_BANK = [
     // Home row + home specials only (a/ā as vowels; cons f j d k s l g h š ģ ķ ļ)
-    'lasa','saka','gada','sala','kala','halls','salds','gala','dada','sasa',
-    'kā','jā','gāja','kāja','lāga','gads','kāds','klāj','glāsa','sāļš','sals','sāka','glāsta',
+    // LABOTS: 'halls'→'halle', 'dada'→'daga', 'sasa'→'sāga', 'glāsa'→izņemts (nav latvisks)
+    'lasa','saka','gada','sala','kala','halle','salds','gala','daga','sāga',
+    'kā','jā','gāja','kāja','lāga','gads','kāds','klāj','sāļš','sals','sāka','glāsta',
+    // Papildināts — mājas rinda:
+    'jaka','gāsa','skals','sāls','kaļķis','kāls','kāsa','kālā','gālā','skaļa',
     // Home + Top (no specials)
-    'te','tu','ir','es','ar','iet','ies','iela','esi','lasi','saki','liek','lieta','sieta',
+    // LABOTS: 'tope'→izņemts, 'papete'→'pipete', 'sieta'→'siets'
+    'te','tu','ir','es','ar','iet','ies','iela','esi','lasi','saki','liek','lieta','siets',
     'tase','rasa','kura','kuru','laiks','sirds',
-    'ola','upe','pile','lapa','pase','ote','tope','opera','papete','lopi','plate',
+    'ola','upe','pile','lapa','pase','ote','opera','pipete','lopi','plate',
+    // Papildināts — mājas + augšējā:
+    'rita','pils','kule','sile','kaste','trase','pirts','luste','rati','rute',
+    'tele','pele','rota','sita',
     // Home + Top + Garumzīmes (no bottom row)
+    // PĀRBAUDĪTS: 'lāse' ir pareizs (lāse = piliens, šļakata)
     'rīts','tētis','pīle','lāse','lasīt','kāpt','īsts','lūk','pār','tā','ēd','ēdi','lapā',
     'jūra','tālāk',
+    // Papildināts — ar garumzīmēm, bez apakšējās rindas:
+    'rīga','tīrs','sīks','lūgt','kūts','tēja','sēta','pēda','lēkt',
+    'ēkas','kājas','sāpes','lūdzu','tīkls','rīkle','lūsis','kūla',
     // Home + Top + Bottom (no specials)
+    // PĀRBAUDĪTS: 'rams' ir latvisks (rams = pāļdzinis), 'govis' pareizs daudzskaitlis
     'nav','var','mums','nams','mute','vista','vakar','vecs','centrs','cepa','celms','zem','zila','zivs','zinu',
     'bumba','balons','putns','govis','ceps','rams','redzu',
+    // Papildināts — mājas + augšējā + apakšējā:
+    'vārds','vārti','vētra','vīrs','vīns','zāle','zeme','zobs','zupa','zvans',
+    'cimds','cirvis','cukurs','cūka','māte','mūris','nāve','nūja','pats',
+    'balta','birze','bites','brīvs','bērns','dēls','dzelzs','dzīve','gars',
     // With garumzīmes (any letters)
     'māja','māsa','pūce','dārzs','ēna','sēne','mēness','grāmata','ābols','vasara','dāvana',
+    // Papildināts — ar garumzīmēm:
+    'āda','ēdiens','ērglis','ūpis','dārznieks','grāvis',
+    'kāpurs','lācis','lāpsta','mākoņi','sārts','tālrunis','vāze',
+    'zāģis','ātrums','brālis','glāze','krāns','plāns',
     // With jumtiņi
     'čaula','čempions','šis','šovs','šauj','žurka','žagari','ežu','vējš','dvēsele','šokolāde','čīkst','žokejs',
+    // Papildināts — ar jumtiņiem:
+    'čakls','šalle','šaurs','šķīvis','šodien','šūna','žāvas','žogs',
+    'čiekurs','šķirne','šķūnis','čūska','šķēps','žagata',
     // With mīkstinājumi
-    'ķirsis','daļa','saliņa','ģimene','ņem','ļauj','ķēve','eņģelis','ļoti','gaņģis','draņķis','mīļais'
+    'ķirsis','daļa','saliņa','ģimene','ņem','ļauj','ķēve','eņģelis','ļoti','gaņģis','draņķis','mīļais',
+    // Papildināts — ar mīkstinājumiem:
+    'ģitāra','ķermenis','ļaudis','ķīlis','ģērbties','ļengans','ķiploks',
+    'skaļš','maļ','kaļ','ļauns','ķēde','ģints','ļaut'
 ];
 
 const SENTENCES = [
+    // Oriģinālie (visi pareizi)
     'saule spīd debesīs',
     'māte cep maizi',
     'kaķis spēlējas dārzā',
@@ -1651,11 +1679,28 @@ const SENTENCES = [
     'ziedi smaržo skaisti',
     'putni dzied kokos',
     'lietus līst pavasarī',
-    'māja stāv uz kalna'
+    'māja stāv uz kalna',
+    // Papildināts:
+    'suns skrien pa ielu',
+    'zivs peld upē',
+    'bērns lasa grāmatu',
+    'saule lec no rīta',
+    'vējš pūš no jūras',
+    'lapas krīt rudenī',
+    'sniegs balts kā piens',
+    'māsa dzied dziesmu',
+    'tēvs brauc ar mašīnu',
+    'kaķis guļ uz krēsla',
+    'bērni spēlējas parkā',
+    'skolnieks raksta vārdus',
+    'ābols aug kokā',
+    'jūra ir dziļa un plaša',
+    'ezis meklē sēnes',
+    'zaķis lec pa lauku'
 ];
 
 // ============================================
-// HELPERS — single responsibility per function
+// HELPERS - single responsibility per function
 // ============================================
 function lowChars(s) { return [...s.toLowerCase()]; }
 
@@ -1672,7 +1717,7 @@ function containsAny(word, required) {
 function uniq(arr) { return [...new Set(arr)]; }
 
 // ============================================
-// CONTENT GENERATORS — produce drill content from letter lists
+// CONTENT GENERATORS - produce drill content from letter lists
 // ============================================
 
 // Letter drill: each letter gets a focused triple, then alternation pairs.
@@ -1748,7 +1793,7 @@ function syllableDrill(letters, extraVowels = []) {
 }
 
 // ============================================
-// WORD FILTERS — select from WORD_BANK by allowed/required chars
+// WORD FILTERS - select from WORD_BANK by allowed/required chars
 // ============================================
 function wordsUsingOnly(allowed) {
     return WORD_BANK.filter(w => usesOnly(w, allowed));
@@ -1759,7 +1804,7 @@ function wordsRequiringAny(required, allowed) {
 }
 
 // ============================================
-// LEVELS — declarative configuration only
+// LEVELS - declarative configuration only
 // ============================================
 const LEVELS = (() => {
     const { home, top, bottom } = KEY_ROWS;
@@ -1774,7 +1819,7 @@ const LEVELS = (() => {
 
     return [
         // -- Phase 1: Mājas rinda --
-        { n: 1,  name: "Mājas burti",        sub: "F J D K A S L G H — pa vienam",
+        { n: 1,  name: "Mājas burti",        sub: "F J D K A S L G H - pa vienam",
           icon: "👆", keysShown: "F J D K A S L G H",
           words: letterDrill(home), steps: 13, drill: true },
 
@@ -1782,7 +1827,7 @@ const LEVELS = (() => {
           icon: "🔡", keysShown: "mājas zilbes",
           words: syllableDrill(home), steps: 10, drill: true },
 
-        { n: 3,  name: "Mājas spec. burti",   sub: "Ā Š Ģ Ķ Ļ — AltGr + burts",
+        { n: 3,  name: "Mājas spec. burti",   sub: "Ā Š Ģ Ķ Ļ - AltGr + burts",
           icon: "📏", keysShown: "Ā Š Ģ Ķ Ļ",
           words: letterDrill(homeSpec), steps: 10, drill: true, altGrTip: true },
 
@@ -1795,7 +1840,7 @@ const LEVELS = (() => {
           words: wordsUsingOnly(homeAll), steps: 8 },
 
         // -- Phase 2: Augšējā rinda --
-        { n: 6,  name: "Augšējie burti",      sub: "E I R U T W O P — pa vienam",
+        { n: 6,  name: "Augšējie burti",      sub: "E I R U T W O P - pa vienam",
           icon: "👆", keysShown: "E I R U T W O P",
           words: letterDrill(top), steps: 12, drill: true },
 
@@ -1803,7 +1848,7 @@ const LEVELS = (() => {
           icon: "🔡", keysShown: "augšējās zilbes",
           words: syllableDrill(top), steps: 10, drill: true },
 
-        { n: 8,  name: "Augšējās garumzīmes", sub: "Ē Ī Ū — AltGr + burts",
+        { n: 8,  name: "Augšējās garumzīmes", sub: "Ē Ī Ū - AltGr + burts",
           icon: "📏", keysShown: "Ē Ī Ū",
           words: letterDrill(topSpec), steps: 6, drill: true, altGrTip: true },
 
@@ -1816,7 +1861,7 @@ const LEVELS = (() => {
           words: wordsRequiringAny([...top, ...topSpec], homeTopAll), steps: 10, showWPM: true },
 
         // -- Phase 3: Apakšējā rinda --
-        { n: 11, name: "Apakšējie burti",     sub: "V N M B C X Z — pa vienam",
+        { n: 11, name: "Apakšējie burti",     sub: "V N M B C X Z - pa vienam",
           icon: "👇", keysShown: "V N M B C X Z",
           words: letterDrill(bottom), steps: 10, drill: true },
 
@@ -1824,7 +1869,7 @@ const LEVELS = (() => {
           icon: "🔡", keysShown: "apakšējās zilbes",
           words: syllableDrill(bottom, ['a','e','i','o','u']), steps: 10, drill: true },
 
-        { n: 13, name: "Apakšējie speciālie", sub: "Č Ž Ņ — AltGr + burts",
+        { n: 13, name: "Apakšējie speciālie", sub: "Č Ž Ņ - AltGr + burts",
           icon: "🎩", keysShown: "Č Ž Ņ",
           words: letterDrill(botSpec), steps: 6, drill: true, altGrTip: true },
 
@@ -1837,7 +1882,7 @@ const LEVELS = (() => {
           words: wordsRequiringAny([...bottom, ...botSpec], allChars), steps: 10, showWPM: true },
 
         // -- Phase 4: Ātrums --
-        { n: 16, name: "Teikumi",             sub: "Pilni teikumi — ātruma posms",
+        { n: 16, name: "Teikumi",             sub: "Pilni teikumi - ātruma posms",
           icon: "🚀", keysShown: "viss",
           words: SENTENCES, steps: 6, showWPM: true, isSentence: true }
     ];
@@ -2126,7 +2171,7 @@ function buildStaircase() {
     const stepHeight = isSentence
         ? (isMobile ? 26 : 32)
         : (isMobile ? 30 : 38);
-    // Ground space below step 0 — must be larger than charSize so the
+    // Ground space below step 0 - must be larger than charSize so the
     // character standing on the ground is fully visible below step 0.
     const groundOffset = charSize + 14;
     const sidePadding = 16;
@@ -2168,7 +2213,7 @@ function buildStaircase() {
     const vertRise = Math.max(8, vertAvail / Math.max(total - 1, 1));
 
     // Font scale: shrink text proportionally if stepW had to shrink below
-    // the measured ideal — keeps long sentences readable on narrow screens.
+    // the measured ideal - keeps long sentences readable on narrow screens.
     const fontScale = maxWordPx > 0
         ? Math.min(1, (stepW - padTotal) / maxWordPx)
         : 1;
@@ -2241,7 +2286,7 @@ function positionCharOnGround() {
     if (!box) return;
     const { charSize, ch, padLeft } = c._layout;
     char.style.left = charXForStep(box, padLeft, charSize) + 'px';
-    // Character bottom sits 4px above container bottom — places the whole
+    // Character bottom sits 4px above container bottom - places the whole
     // character visibly BELOW step 0 (which has groundOffset of breathing room).
     char.style.top = (ch - charSize - 4) + 'px';
 }
@@ -2535,7 +2580,7 @@ document.addEventListener('leaderboard:next', () => {
 });
 document.addEventListener('leaderboard:menu', () => backToMenu());
 document.addEventListener('leaderboard:done', () => {
-    // Network failed — fall back to old celebration so player isn't stuck
+    // Network failed - fall back to old celebration so player isn't stuck
     document.getElementById('celebration').classList.add('active');
 });
 
@@ -2576,7 +2621,7 @@ function backToMenu() {
     document.getElementById('levelSelect').classList.remove('hidden');
     buildLevelSelect();
     history.replaceState(null, '', location.pathname);
-    document.title = 'Burtu Trepe — Mācies rakstīt latviski';
+    document.title = 'Burtu Trepe - Mācies rakstīt latviski';
 }
 
 // ============================================
@@ -2634,7 +2679,7 @@ document.addEventListener('keydown', (e) => {
     }
 
     // If a leaderboard overlay or its name prompt is open, let it handle
-    // every key — never steal focus back to the typing input.
+    // every key - never steal focus back to the typing input.
     const lbOpen = document.getElementById('lbOverlay')?.classList.contains('open')
                 || !!document.querySelector('.lb-prompt:not(.closing)');
     if (lbOpen) return;
@@ -2644,7 +2689,7 @@ document.addEventListener('keydown', (e) => {
             backToMenu();
             return;
         }
-        // Refocus input if user clicks away — but never if they're typing
+        // Refocus input if user clicks away - but never if they're typing
         // into a different input (name modal, search field, etc.)
         const ae = document.activeElement;
         const typingElsewhere = ae && ae !== wordInput && (
@@ -2697,8 +2742,8 @@ window.addEventListener('resize', () => {
 });
 
 function updateLevelMeta(lvl) {
-    const title = `${lvl.n}. ${lvl.name} — Burtu Trepe`;
-    const desc = `Spēlē "${lvl.name}" līmeni Burtu Trepe — ${lvl.sub}. Bezmaksas rakstīšanas spēle bērniem latviešu valodā.`;
+    const title = `${lvl.n}. ${lvl.name} - Burtu Trepe`;
+    const desc = `Spēlē "${lvl.name}" līmeni Burtu Trepe - ${lvl.sub}. Bezmaksas rakstīšanas spēle bērniem latviešu valodā.`;
     const url = `${location.origin}${location.pathname}?level=${lvl.n}`;
     document.title = title;
     history.replaceState(null, '', `?level=${lvl.n}`);
@@ -2712,8 +2757,8 @@ function updateLevelMeta(lvl) {
 function shareLevel() {
     const lvl = LEVELS[currentLevelIdx];
     const url = `${location.origin}${location.pathname}?level=${lvl.n}`;
-    const title = `${lvl.n}. ${lvl.name} — Burtu Trepe`;
-    const text = `Spēlē "${lvl.name}" — ${lvl.sub}`;
+    const title = `${lvl.n}. ${lvl.name} - Burtu Trepe`;
+    const text = `Spēlē "${lvl.name}" - ${lvl.sub}`;
     if (navigator.share) {
         navigator.share({ title, text, url }).catch(() => {});
         return;
@@ -2756,7 +2801,7 @@ if (urlLevel) {
 }
 </script>
 
-<!-- Leaderboard module — registers listener for game:level-complete -->
+<!-- Leaderboard module - registers listener for game:level-complete -->
 <script type="module" src="js/leaderboard-main.js"></script>
 </body>
 </html>
