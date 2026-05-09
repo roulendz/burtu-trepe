@@ -4,8 +4,8 @@ import { renderCard } from './leaderboard-ui.js';
 
 const LEVEL_NAMES = [
     'Mājas burti', 'Mājas zilbes', 'Mājas spec. burti', 'Mājas spec. zilbes', 'Mājas vārdi',
-    'Augšējās burti', 'Augšējās zilbes', 'Augšējās garumzīmes', 'Augšējās spec. zilbes', 'Mājas + Augšējā',
-    'Apakšējās burti', 'Apakšējās zilbes', 'Apakšējās speciālie', 'Apakšējās spec. zilbes', 'Visu rindu vārdi',
+    'Augšējie burti', 'Augšējās zilbes', 'Augšējās garumzīmes', 'Augšējās spec. zilbes', 'Mājas + Augšējā',
+    'Apakšējie burti', 'Apakšējās zilbes', 'Apakšējie speciālie', 'Apakšējās spec. zilbes', 'Visu rindu vārdi',
     'Teikumi',
 ];
 
