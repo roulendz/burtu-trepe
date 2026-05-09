@@ -1821,7 +1821,7 @@ const LEVELS = (() => {
         // -- Phase 1: Mājas rinda --
         { n: 1,  name: "Mājas burti",        sub: "F J D K A S L G H - pa vienam",
           icon: "👆", keysShown: "F J D K A S L G H",
-          words: letterDrill(home), steps: 13, drill: true },
+          words: letterDrill(home), steps: 10, drill: true },
 
         { n: 2,  name: "Mājas zilbes",        sub: "Zilbes ar mājas rindas burtiem",
           icon: "🔡", keysShown: "mājas zilbes",
@@ -1840,9 +1840,9 @@ const LEVELS = (() => {
           words: wordsUsingOnly(homeAll), steps: 8 },
 
         // -- Phase 2: Augšējā rinda --
-        { n: 6,  name: "Augšējie burti",      sub: "E I R U T W O P - pa vienam",
-          icon: "👆", keysShown: "E I R U T W O P",
-          words: letterDrill(top), steps: 12, drill: true },
+        { n: 6,  name: "Augšējie burti",      sub: "E I R U T O P - pa vienam",
+          icon: "👆", keysShown: "E I R U T O P",
+          words: letterDrill(top), steps: 10, drill: true },
 
         { n: 7,  name: "Augšējās zilbes",     sub: "Zilbes ar augšējās rindas burtiem",
           icon: "🔡", keysShown: "augšējās zilbes",
@@ -1850,39 +1850,42 @@ const LEVELS = (() => {
 
         { n: 8,  name: "Augšējās garumzīmes", sub: "Ē Ī Ū - AltGr + burts",
           icon: "📏", keysShown: "Ē Ī Ū",
-          words: letterDrill(topSpec), steps: 6, drill: true, altGrTip: true },
+          words: letterDrill(topSpec), steps: 10, drill: true, altGrTip: true },
 
         { n: 9,  name: "Augšējās spec. zilbes", sub: "Zilbes ar Ē Ī Ū",
           icon: "🔡", keysShown: "augšējās + Ē Ī Ū",
           words: syllablesIncluding(topSpec, homeTopAll), steps: 10, drill: true, altGrTip: true },
 
-        { n: 10, name: "Mājas + Augšējā",     sub: "Vārdi no abām rindām (ar visām spec.)",
+        { n: 10, name: "Mājas + Augšējā (pamata)", sub: "Vārdi bez garumzīmēm no abām rindām", icon: "🌿", keysShown: "mājas + augšējā pamata vārdi", words: wordsRequiringAny([...top], uniq([...home, ...top])), steps: 10, showWPM: true },
+        { n: 11, name: "Mājas + Augšējā",     sub: "Vārdi no abām rindām (ar visām spec.)",
           icon: "🌿", keysShown: "mājas + augšējā vārdi",
           words: wordsRequiringAny([...top, ...topSpec], homeTopAll), steps: 10, showWPM: true },
 
         // -- Phase 3: Apakšējā rinda --
-        { n: 11, name: "Apakšējie burti",     sub: "V N M B C X Z - pa vienam",
-          icon: "👇", keysShown: "V N M B C X Z",
+        { n: 12, name: "Apakšējie burti",     sub: "V N M B C Z - pa vienam",
+          icon: "👇", keysShown: "V N M B C Z",
           words: letterDrill(bottom), steps: 10, drill: true },
 
-        { n: 12, name: "Apakšējās zilbes",    sub: "Zilbes ar visiem patskaņiem",
+        { n: 13, name: "Apakšējās zilbes",    sub: "Zilbes ar visiem patskaņiem",
           icon: "🔡", keysShown: "apakšējās zilbes",
           words: syllableDrill(bottom, ['a','e','i','o','u']), steps: 10, drill: true },
 
-        { n: 13, name: "Apakšējie speciālie", sub: "Č Ž Ņ - AltGr + burts",
+        { n: 14, name: "Apakšējie speciālie", sub: "Č Ž Ņ - AltGr + burts",
           icon: "🎩", keysShown: "Č Ž Ņ",
-          words: letterDrill(botSpec), steps: 6, drill: true, altGrTip: true },
-
-        { n: 14, name: "Apakšējās spec. zilbes", sub: "Zilbes ar Č Ž Ņ",
+          words: letterDrill(botSpec), steps: 10, drill: true, altGrTip: true },
+        { n: 15, name: "Mājas + Apakšējā (pamata)", sub: "Vārdi bez spec. no mājas un apakšējās", icon: "🌱", keysShown: "mājas + apakšējā pamata vārdi", words: wordsRequiringAny([...bottom], uniq([...home, ...bottom])), steps: 10, showWPM: true },
+        { n: 16, name: "Mājas + Apakšējā", sub: "Vārdi ar Č Ž Ņ Ā Š Ģ Ķ Ļ no mājas un apakšējās", icon: "🌳", keysShown: "mājas + apakšējā vārdi", words: wordsRequiringAny( [...bottom, ...botSpec], uniq([...homeAll, ...bottom, ...botSpec]) ), steps: 10, showWPM: true },
+        { n: 17, name: "Visu rindu vārdi (pamata)", sub: "Vārdi bez spec. no visām 3 rindām", icon: "🏔️", keysShown: "visi pamata vārdi", words: wordsRequiringAny( [...bottom], uniq([...home, ...top, ...bottom]) ), steps: 10, showWPM: true },
+        { n: 18, name: "Apakšējās spec. zilbes", sub: "Zilbes ar Č Ž Ņ",
           icon: "🔡", keysShown: "apakšējās + Č Ž Ņ",
           words: syllablesIncluding(botSpec, allChars), steps: 10, drill: true, altGrTip: true },
 
-        { n: 15, name: "Visu rindu vārdi",    sub: "Vārdi no visām 3 rindām",
+        { n: 19, name: "Visu rindu vārdi",    sub: "Vārdi no visām 3 rindām",
           icon: "🏔️", keysShown: "visi vārdi",
           words: wordsRequiringAny([...bottom, ...botSpec], allChars), steps: 10, showWPM: true },
 
         // -- Phase 4: Ātrums --
-        { n: 16, name: "Teikumi",             sub: "Pilni teikumi - ātruma posms",
+        { n: 20, name: "Teikumi",             sub: "Pilni teikumi - ātruma posms",
           icon: "🚀", keysShown: "viss",
           words: SENTENCES, steps: 6, showWPM: true, isSentence: true }
     ];
